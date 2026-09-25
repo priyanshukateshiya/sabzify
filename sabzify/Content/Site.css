@@ -34,6 +34,11 @@ textarea {
     --sabz-ink-400: #97A69D;
     --sabz-line: #E1E8E1;
     --beet-600: #C0392B;
+    --sabz-orange: #F97316;
+    --sabz-red: #E03131;
+    --sabz-deal-green: #1F6B2A;
+    --sabz-btn-green: #2E7D32;
+    --sabz-btn-green-hover: #256B29;
 }
 
 .auth-page {
@@ -43,7 +48,6 @@ textarea {
     align-items: center;
     justify-content: center;
     padding: 40px 16px;
-    margin: -15px -15px 0;
 }
 
 .auth-card {
@@ -135,9 +139,11 @@ textarea {
     pointer-events: none;
 }
 
-/* Override the template's global 280px input cap inside the auth card. */
-.auth-page input[type="text"],
-.auth-page input[type="password"] {
+/* Override the template's global 280px input cap inside the auth card.
+   This must cover input[type=submit] too: <asp:Button> renders as one, and
+   the cap was stopping the submit button short of the card's full width. */
+.auth-page input,
+.auth-page textarea {
     max-width: none;
 }
 
@@ -200,7 +206,7 @@ textarea {
     margin-top: 8px;
     border: 0;
     border-radius: 10px;
-    background: var(--sabz-green-600);
+    background: var(--sabz-btn-green);
     color: #fff;
     font-size: 13px;
     font-weight: 600;
@@ -210,7 +216,7 @@ textarea {
 
 .auth-btn:hover,
 .auth-btn:focus {
-    background: var(--sabz-green-700);
+    background: var(--sabz-btn-green-hover);
     color: #fff;
 }
 
@@ -286,7 +292,1063 @@ textarea {
     transform: none;
 }
 
-/* The template caps textareas at 280px like other inputs; lift it here too. */
-.auth-page textarea {
+/* Forgot Password / Verify OTP ---------------------------------------------- */
+/* Both cards reuse .auth-card; these rules only add what the designs need.
+   Selectors are prefixed with .auth-page so they beat the generic
+   .auth-page input / .auth-input rules above. */
+.auth-page .auth-card--glow,
+.auth-page .auth-card--otp {
+    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(26, 43, 32, .08);
+}
+
+.auth-page .auth-title {
+    margin: 0 0 8px;
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--sabz-ink-900);
+}
+
+/* Forgot Password ----------------------------------------------------------- */
+.auth-page--forgot,
+.site-main:has(.auth-page--forgot) {
+    background: #F3F8FD;
+}
+
+.auth-page .auth-card--glow {
+    position: relative;
+    overflow: hidden;
+    padding: 48px 48px 52px;
+}
+
+/* Soft decorative glow in the card's top-right corner. */
+.auth-page .auth-card--glow::before {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -70px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(76, 175, 80, .22) 0%, rgba(76, 175, 80, .08) 45%, rgba(76, 175, 80, 0) 70%);
+    pointer-events: none;
+}
+
+.auth-card--glow .auth-brand-name {
+    font-size: 22px;
+}
+
+.auth-page .auth-icon-bubble {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin: 16px auto 14px;
+    border-radius: 50%;
+    background: #E6F2E1;
+}
+
+.auth-page .auth-icon-bubble svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: #2E7D32;
+}
+
+.auth-card--glow .auth-title {
+    font-size: 24px;
+}
+
+.auth-page .auth-card--glow .auth-subtitle {
+    max-width: 280px;
+    margin: 0 auto 28px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.auth-page .auth-card--glow .auth-input {
+    background: #F3F8FD;
+    border-color: #CBD5E1;
+    border-radius: 8px;
+}
+
+.auth-page .auth-card--glow .auth-input:focus {
+    border-color: var(--sabz-green-500);
+}
+
+.auth-page .auth-card--glow .auth-input::placeholder {
+    color: #8A9BB0;
+}
+
+.auth-page .auth-card--glow .auth-input-icon {
+    fill: #8A9BB0;
+}
+
+.auth-page .auth-card--glow .auth-foot {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.auth-page .auth-card--glow .auth-foot a {
+    font-weight: 600;
+    color: #2E7D32;
+}
+
+/* Verify OTP ----------------------------------------------------------------- */
+.auth-page .auth-card--otp {
+    padding: 32px 28px 28px;
+}
+
+.auth-card--otp .auth-brand {
+    margin-bottom: 18px;
+}
+
+.auth-card--otp .auth-brand-name {
+    font-size: 28px;
+}
+
+.auth-card--otp .auth-title {
+    font-size: 22px;
+}
+
+.auth-page .auth-card--otp .auth-subtitle {
+    margin: 0 0 24px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.otp-number {
+    font-weight: 700;
+    color: var(--sabz-ink-900);
+}
+
+.auth-page .otp-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Each box sits in .otp-cell (box + its two empty validators). */
+.auth-page .otp-row .otp-cell {
+    flex: 0 0 48px;
+    min-width: 0;
+}
+
+.auth-page .otp-row .field-error {
+    margin: 0;
+}
+
+.auth-page .otp-row input.otp-box {
+    display: block;
+    box-sizing: border-box;
+    width: 48px;
+    max-width: 100%;
+    height: 52px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #D9DED6;
+    border-radius: 10px;
+    background: #fff;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--sabz-ink-900);
+    outline: none;
+    box-shadow: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.auth-page .otp-row input.otp-box:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, .18);
+}
+
+/* Same :has() approach as Register - see "Invalid-field red border" below. */
+.auth-page .otp-cell:has(.field-error:not([style*="display:none"]):not([style*="display: none"])) input.otp-box,
+.auth-page .otp-cell:has(.field-error:not([style*="display:none"]):not([style*="display: none"])) input.otp-box:focus {
+    border-color: var(--beet-600);
+}
+
+.auth-page .otp-cell:has(.field-error:not([style*="display:none"]):not([style*="display: none"])) input.otp-box:focus {
+    box-shadow: 0 0 0 3px rgba(192, 57, 43, .15);
+}
+
+/* ValidationSummary renders style="display:none" while valid, so this
+   margin only takes up space when the message is showing. */
+.auth-page .form-error {
+    margin: 12px 0 0;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--beet-600);
+}
+
+.auth-page .auth-card--otp .auth-btn {
+    margin-top: 24px;
+}
+
+.auth-page .auth-card--otp .auth-foot {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--sabz-ink-900);
+}
+
+.auth-page .otp-resend {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4CAF50;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.auth-page .otp-resend:hover,
+.auth-page .otp-resend:focus {
+    color: #2E7D32;
+    text-decoration: underline;
+}
+
+/* While the countdown runs the button is disabled: grey-green, not clickable. */
+.auth-page .otp-resend:disabled {
+    color: #4CAF50;
+    opacity: .7;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: default;
+}
+
+@media screen and (max-width: 480px) {
+    .auth-page {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .auth-page .auth-card--glow,
+    .auth-page .auth-card--otp {
+        max-width: none;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .auth-page .otp-row {
+        gap: 8px;
+    }
+
+    /* Shrink below 40px only on very narrow phones so the row never wraps. */
+    .auth-page .otp-row .otp-cell {
+        flex: 0 1 40px;
+    }
+
+    .auth-page .otp-row input.otp-box {
+        width: 40px;
+        height: 46px;
+        font-size: 18px;
+    }
+}
+
+
+/* ==========================================================================
+   Sabzify site chrome + Home page
+   ========================================================================== */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--sabz-bg);
+    color: var(--sabz-ink-900);
+}
+
+/* The WebForms <form> wraps header/main/footer, so it carries the column too. */
+body > form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+/* Shared 1240px content rail. */
+.shell {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ---------- Header ------------------------------------------------------- */
+.site-header {
+    background: #fff;
+    border-bottom: 1px solid var(--sabz-line);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    height: 68px;
+}
+
+.site-brand {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex: none;
+    text-decoration: none;
+}
+
+.site-brand-leaf {
+    width: 20px;
+    height: 20px;
+    fill: var(--sabz-green-600);
+}
+
+.site-brand-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sabz-green-700);
+    letter-spacing: -.01em;
+}
+
+.header-search {
+    position: relative;
+    flex: 1 1 auto;
+    max-width: 420px;
+}
+
+.header-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    width: 15px;
+    height: 15px;
+    transform: translateY(-50%);
+    fill: var(--sabz-ink-400);
+    pointer-events: none;
+}
+
+/* Beats the template's global 280px input cap. */
+.header-search-input {
+    width: 100%;
     max-width: none;
+    height: 36px;
+    padding: 0 14px 0 34px;
+    border: 1px solid var(--sabz-line);
+    border-radius: 999px;
+    background: #F7FAF7;
+    font-size: 13px;
+    color: var(--sabz-ink-900);
+    outline: none;
+}
+
+.header-search-input::placeholder {
+    color: var(--sabz-ink-400);
+}
+
+.header-search-input:focus {
+    border-color: var(--sabz-green-500);
+    background: #fff;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    flex: none;
+    margin-left: auto;
+}
+
+.header-nav-link {
+    position: relative;
+    padding: 24px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sabz-ink-600);
+    text-decoration: none;
+}
+
+.header-nav-link:hover {
+    color: var(--sabz-green-600);
+    text-decoration: none;
+}
+
+/* Active "Home" underline. */
+.header-nav-link.is-active {
+    color: var(--sabz-green-700);
+    font-weight: 600;
+}
+
+.header-nav-link.is-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--sabz-green-600);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: none;
+}
+
+.header-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    color: inherit;
+}
+
+.header-icon svg {
+    width: 19px;
+    height: 19px;
+    fill: var(--sabz-ink-600);
+}
+
+.header-icon:hover svg {
+    fill: var(--sabz-green-600);
+}
+
+.header-cart-badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--sabz-red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: center;
+}
+
+/* ---------- Buttons ------------------------------------------------------ */
+.btn-leaf {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--sabz-btn-green);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .15s ease;
+}
+
+.btn-leaf:hover,
+.btn-leaf:focus {
+    background: var(--sabz-btn-green-hover);
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-white {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--sabz-green-700);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-white:hover,
+.btn-white:focus {
+    background: #EAF6EA;
+    color: var(--sabz-green-700);
+    text-decoration: none;
+}
+
+/* ---------- Section scaffolding ------------------------------------------ */
+.section {
+    margin-top: 48px;
+}
+
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sabz-ink-900);
+    letter-spacing: -.01em;
+}
+
+.section-title--center {
+    margin-bottom: 26px;
+    text-align: center;
+}
+
+.view-all {
+    flex: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sabz-green-600);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.view-all:hover {
+    color: var(--sabz-green-700);
+    text-decoration: underline;
+}
+
+/* ---------- Hero --------------------------------------------------------- */
+.hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 420px;
+    margin-top: 24px;
+    border-radius: 14px;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: #2C5322 url('Images/hero-basket.jpg') center right / cover no-repeat;
+}
+
+/* Darkens the left side only, behind the copy. */
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(14, 32, 14, .85) 0%, rgba(14, 32, 14, .6) 35%, rgba(14, 32, 14, 0) 65%);
+}
+
+.hero-content {
+    position: relative;
+    max-width: 520px;
+    padding: 0 48px;
+}
+
+.hero-title {
+    margin: 0 0 14px;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.18;
+    color: #fff;
+    letter-spacing: -.02em;
+}
+
+.hero-text {
+    margin: 0 0 22px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, .88);
+}
+
+.hero-btn {
+    height: 40px;
+    padding: 0 22px;
+}
+
+/* ---------- Shop by Category --------------------------------------------- */
+.cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.cat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 132px;
+    padding: 20px 16px;
+    border: 1px solid var(--sabz-line);
+    border-radius: 12px;
+    background: #fff;
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgba(26, 43, 32, .05);
+    transition: box-shadow .15s ease, transform .15s ease;
+}
+
+.cat-card:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(26, 43, 32, .1);
+}
+
+.cat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #E8F5E9;
+}
+
+.cat-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--sabz-green-600);
+}
+
+.cat-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sabz-ink-900);
+}
+
+/* ---------- Fresh Today -------------------------------------------------- */
+.prod-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.prod-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--sabz-line);
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(26, 43, 32, .05);
+    transition: box-shadow .15s ease, transform .15s ease;
+}
+
+.prod-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(26, 43, 32, .1);
+}
+
+.prod-media {
+    position: relative;
+    height: 132px;
+    margin: 8px 8px 0;
+    border-radius: 8px;
+    background: #F1F3F5;
+    overflow: hidden;
+}
+
+/* multiply blends the photos' white backdrop into the grey box. */
+.product-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+.prod-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--sabz-orange);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .01em;
+}
+
+.prod-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: 12px 12px 14px;
+}
+
+.prod-name {
+    margin: 0 0 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sabz-ink-900);
+}
+
+.prod-unit {
+    margin: 0 0 8px;
+    font-size: 11px;
+    color: var(--sabz-ink-400);
+}
+
+.prod-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    margin: 0 0 12px;
+}
+
+.price-now {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--sabz-ink-900);
+}
+
+.price-old {
+    font-size: 11px;
+    color: var(--sabz-ink-400);
+    text-decoration: line-through;
+}
+
+/* Push the action to the card foot so all five cards align. */
+.prod-btn,
+.qty-stepper {
+    margin-top: auto;
+}
+
+.prod-btn {
+    width: 100%;
+    height: 34px;
+    padding: 0;
+    font-size: 12px;
+}
+
+/* ---------- Quantity stepper (Carrot card) -------------------------------- */
+.qty-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 34px;
+    padding: 0 4px;
+    border: 0;
+    border-radius: 8px;
+    background: #E7EEF3;
+}
+
+.qty-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--sabz-green-700);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.qty-btn:hover {
+    background: #D7E4EC;
+}
+
+.qty-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sabz-ink-900);
+}
+
+/* ---------- Fresh Deals banner ------------------------------------------- */
+.deals {
+    display: flex;
+    align-items: stretch;
+    min-height: 200px;
+    margin-top: 48px;
+    border-radius: 14px;
+    background: var(--sabz-deal-green);
+    overflow: hidden;
+}
+
+.deals-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+    padding: 32px 40px;
+}
+
+.deals-title {
+    margin: 0 0 8px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -.01em;
+}
+
+.deals-text {
+    margin: 0 0 20px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, .88);
+}
+
+.deals-em {
+    font-weight: 700;
+    color: #FFD54A;
+}
+
+.deals-btn {
+    align-self: flex-start;
+}
+
+.deals-media {
+    flex: 0 0 34%;
+    background: #2C5322 url('Images/deals-crate.jpg') center / cover no-repeat;
+}
+
+/* ---------- Why Choose Sabzify ------------------------------------------- */
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.why-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-height: 150px;
+    padding: 24px 18px;
+    border: 1px solid var(--sabz-line);
+    border-radius: 12px;
+    background: #fff;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(26, 43, 32, .05);
+}
+
+.why-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #E8F5E9;
+}
+
+.why-icon svg {
+    width: 21px;
+    height: 21px;
+    fill: var(--sabz-green-600);
+}
+
+.why-name {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sabz-ink-900);
+}
+
+.why-text {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--sabz-ink-600);
+}
+
+/* ---------- Footer ------------------------------------------------------- */
+.site-main {
+    flex: 1 0 auto;
+    padding-bottom: 56px;
+}
+
+.site-footer {
+    border-top: 1px solid var(--sabz-line);
+    background: #fff;
+}
+
+.footer-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-top: 28px;
+    padding-bottom: 28px;
+}
+
+.footer-brand {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sabz-green-700);
+}
+
+.footer-tagline {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--sabz-ink-600);
+}
+
+.footer-copy {
+    margin: 0;
+    flex: none;
+    font-size: 11px;
+    color: var(--sabz-ink-600);
+}
+
+/* ---------- Responsive --------------------------------------------------- */
+@media screen and (max-width: 1024px) {
+    .prod-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 860px) {
+    .header-inner {
+        flex-wrap: wrap;
+        gap: 14px;
+        height: auto;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .header-search {
+        order: 3;
+        flex-basis: 100%;
+        max-width: none;
+    }
+
+    .header-nav {
+        gap: 18px;
+    }
+
+    .header-nav-link {
+        padding: 6px 0;
+    }
+
+    .header-nav-link.is-active::after {
+        bottom: 0;
+    }
+
+    .cat-grid,
+    .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero {
+        min-height: 360px;
+    }
+
+    .hero-content {
+        max-width: none;
+        padding: 0 32px;
+    }
+
+    .hero-title {
+        font-size: 30px;
+    }
+
+    .deals {
+        display: block;
+    }
+
+    .deals-media {
+        height: 150px;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .shell {
+        padding: 0 16px;
+    }
+
+    .section {
+        margin-top: 36px;
+    }
+
+    .prod-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero {
+        min-height: 320px;
+    }
+
+    .hero::before {
+        background: linear-gradient(90deg, rgba(14, 32, 14, .85) 0%, rgba(14, 32, 14, .65) 55%, rgba(14, 32, 14, .1) 100%);
+    }
+
+    .hero-content {
+        padding: 0 22px;
+    }
+
+    .hero-title {
+        font-size: 25px;
+    }
+
+    .deals-copy {
+        padding: 26px 22px;
+    }
+
+    .deals-title {
+        font-size: 21px;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .header-nav {
+        gap: 14px;
+    }
+
+    .header-nav-link {
+        font-size: 12px;
+    }
+}
+
+/* Invalid-field red border -------------------------------------------------
+   Validators use Display="Dynamic": ASP.NET writes style="display:none;" when
+   the field is valid and removes/replaces it when invalid. Two spellings must
+   both be excluded - the server renders "display:none;" (no space) while the
+   client's ValidatorUpdateDisplay writes "display: none;" (with a space). On a
+   server postback an invalid validator carries no style attribute at all, so
+   :not([style*=...]) matches it and the border turns red there too.
+   The border sits on .auth-input itself, not on .auth-input-wrap. */
+.auth-field:has(.field-error:not([style*="display:none"]):not([style*="display: none"])) .auth-input {
+    border-color: var(--beet-600);
+}
+
+/* Keep the red border while the field has focus - this selector is more
+   specific than .auth-input:focus, so the green ring cannot override it. */
+.auth-field:has(.field-error:not([style*="display:none"]):not([style*="display: none"])) .auth-input:focus {
+    border-color: var(--beet-600);
+    box-shadow: 0 0 0 3px rgba(192, 57, 43, .15);
 }

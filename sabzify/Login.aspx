@@ -42,7 +42,7 @@
             <div class="auth-field">
                 <div class="auth-label-row">
                     <label class="auth-label" for="<%= txtPassword.ClientID %>">Password</label>
-                    <a class="auth-forgot" href="#">Forgot Password?</a>
+                    <a class="auth-forgot" href="ForgotPassword.aspx">Forgot Password?</a>
                 </div>
                 <div class="auth-input-wrap">
                     <svg class="auth-input-icon" viewBox="0 0 24 24" aria-hidden="true">
