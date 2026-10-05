@@ -103,6 +103,22 @@
     <Content Include="Contact.aspx" />
     <Content Include="ForgotPassword.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="Admin\AddCategory.aspx" />
+    <Content Include="Admin\AddUser.aspx" />
+    <Content Include="Admin\Users.aspx" />
+    <Content Include="Admin\AddProduct.aspx" />
+    <Content Include="Admin\Admin.Master" />
+    <Content Include="Admin\Categories.aspx" />
+    <Content Include="Admin\EditProduct.aspx" />
+    <Content Include="Admin\Products.aspx" />
+    <Content Include="Admin\Dashboard.aspx" />
+    <Content Include="Admin\ForgotPassword.aspx" />
+    <Content Include="Admin\Login.aspx" />
+    <Content Include="Admin\ResetPassword.aspx" />
+    <Content Include="Admin\VerifyCode.aspx" />
+    <Content Include="Admin\Orders.aspx" />
+    <Content Include="Admin\Payments.aspx" />
+    <Content Include="Admin\EditProfile.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="VerifyOTP.aspx" />
     <Content Include="Vegetables.aspx" />
@@ -224,104 +240,6 @@
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="ForgotPassword.aspx.cs">
-      <DependentUpon>ForgotPassword.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ForgotPassword.aspx.designer.cs">
-      <DependentUpon>ForgotPassword.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="VerifyOTP.aspx.cs">
-      <DependentUpon>VerifyOTP.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="VerifyOTP.aspx.designer.cs">
-      <DependentUpon>VerifyOTP.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Vegetables.aspx.cs">
-      <DependentUpon>Vegetables.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Vegetables.aspx.designer.cs">
-      <DependentUpon>Vegetables.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ProductDetails.aspx.cs">
-      <DependentUpon>ProductDetails.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProductDetails.aspx.designer.cs">
-      <DependentUpon>ProductDetails.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Cart.aspx.cs">
-      <DependentUpon>Cart.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Cart.aspx.designer.cs">
-      <DependentUpon>Cart.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Checkout.aspx.cs">
-      <DependentUpon>Checkout.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Checkout.aspx.designer.cs">
-      <DependentUpon>Checkout.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="OrderConfirmation.aspx.cs">
-      <DependentUpon>OrderConfirmation.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="OrderConfirmation.aspx.designer.cs">
-      <DependentUpon>OrderConfirmation.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Wishlist.aspx.cs">
-      <DependentUpon>Wishlist.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Wishlist.aspx.designer.cs">
-      <DependentUpon>Wishlist.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="TrackOrder.aspx.cs">
-      <DependentUpon>TrackOrder.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TrackOrder.aspx.designer.cs">
-      <DependentUpon>TrackOrder.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="MyOrders.aspx.cs">
-      <DependentUpon>MyOrders.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MyOrders.aspx.designer.cs">
-      <DependentUpon>MyOrders.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Profile.aspx.cs">
-      <DependentUpon>Profile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Profile.aspx.designer.cs">
-      <DependentUpon>Profile.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SavedAddresses.aspx.cs">
-      <DependentUpon>SavedAddresses.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SavedAddresses.aspx.designer.cs">
-      <DependentUpon>SavedAddresses.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AddAddress.aspx.cs">
-      <DependentUpon>AddAddress.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AddAddress.aspx.designer.cs">
-      <DependentUpon>AddAddress.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="PaymentMethods.aspx.cs">
-      <DependentUpon>PaymentMethods.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PaymentMethods.aspx.designer.cs">
-      <DependentUpon>PaymentMethods.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -428,4 +346,4 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
-</Project>
+</Project>

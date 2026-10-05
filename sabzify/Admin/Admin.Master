@@ -1,0 +1,304 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin.Master.cs" Inherits="sabzify.Admin.AdminMaster" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head id="Head1" runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <%-- The suffix is an asp:Literal, not plain text: HtmlTitle treats plain text
+         beside a child control as its Text and drops it on render. --%>
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /><asp:Literal runat="server" Text=" | Sabzify Admin" /></title>
+    <%-- The whole admin shell (sidebar + main area). Standalone: no Site.Master,
+         no Site.css. Page-specific styles go in HeadContent. --%>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: #F7F9FA;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-size: 14px;
+            line-height: 1.5;
+            color: #111827;
+        }
+
+        body > form {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .admin-shell *,
+        .admin-shell *::before,
+        .admin-shell *::after {
+            box-sizing: border-box;
+        }
+
+        .admin-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar ------------------------------------------------------------- */
+        .admin-shell .adm-sidebar {
+            display: flex;
+            flex-direction: column;
+            flex: 0 0 210px;
+            width: 210px;
+            min-height: 100vh;
+            background: #EFF7F6;
+            border-right: 1px solid #E3ECEA;
+        }
+
+        .admin-shell .adm-brand {
+            padding: 18px 16px;
+        }
+
+        .admin-shell .adm-brand-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #1B7A3A;
+        }
+
+        .admin-shell .adm-brand-sub {
+            margin: 3px 0 0;
+            font-size: 9px;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #6B7280;
+        }
+
+        /* Small logo mark: only shown on the collapsed icon rail. */
+        .admin-shell .adm-brand-mark {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            margin: 0 auto;
+            border-radius: 8px;
+            background: #1B7A3A;
+            color: #fff;
+        }
+
+        .admin-shell .adm-brand-mark svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .admin-shell .adm-nav {
+            flex: 1;
+            margin: 0;
+            padding: 10px 0;
+            list-style: none;
+        }
+
+        /* One size for every item, active or not: the active state below only
+           changes colours, never padding, font size or icon size. */
+        .admin-shell .adm-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 8px 2px;
+            padding: 9px 11px;
+            border-radius: 7px;
+            font-size: 11.5px;
+            line-height: 1.3;
+            color: #374151;
+            text-align: left;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color .15s ease;
+        }
+
+        .admin-shell .adm-link svg {
+            flex-shrink: 0;
+            width: 15px;
+            height: 15px;
+            color: #6B7280;
+        }
+
+        .admin-shell .adm-link:hover {
+            background: #F1F5F2;
+        }
+
+        .admin-shell .adm-link.is-active,
+        .admin-shell .adm-link.is-active:hover {
+            background: #A8E6A8;
+            color: #1B6E2A;
+            font-weight: 600;
+        }
+
+        .admin-shell .adm-link.is-active svg {
+            color: #1B6E2A;
+        }
+
+        .admin-shell .adm-bottom {
+            padding: 14px 0;
+            border-top: 1px solid #EFF1ED;
+        }
+
+        .admin-shell .adm-bottom .adm-link {
+            font-weight: 600;
+        }
+
+        /* Main area ------------------------------------------------------------ */
+        .admin-shell .adm-main {
+            flex: 1;
+            min-width: 0;
+            padding: 24px 28px;
+            background: #F7FAFC;
+        }
+
+        /* Collapsed icon rail. */
+        @media screen and (max-width: 900px) {
+            .admin-shell .adm-sidebar {
+                flex-basis: 62px;
+                width: 62px;
+            }
+
+            .admin-shell .adm-brand {
+                padding: 16px 0;
+            }
+
+            .admin-shell .adm-brand-title,
+            .admin-shell .adm-brand-sub,
+            .admin-shell .adm-label {
+                display: none;
+            }
+
+            .admin-shell .adm-brand-mark {
+                display: flex;
+            }
+
+            .admin-shell .adm-link {
+                justify-content: center;
+                padding: 9px 0;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .admin-shell .adm-main {
+                padding: 18px 16px;
+            }
+        }
+    </style>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+    <form id="form1" runat="server" enctype="multipart/form-data">
+        <div class="admin-shell">
+            <aside class="adm-sidebar">
+                <div class="adm-brand">
+                    <p class="adm-brand-title">Sabzify</p>
+                    <p class="adm-brand-sub">Admin Panel</p>
+                    <span class="adm-brand-mark" title="Sabzify Admin">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" />
+                            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                        </svg>
+                    </span>
+                </div>
+
+                <ul class="adm-nav">
+                    <li>
+                        <a class="adm-link" href="Dashboard.aspx" title="Dashboard">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+                            </svg>
+                            <span class="adm-label">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="adm-link" href="Categories.aspx" title="Categories">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" /><line x1="7" y1="7" x2="7.01" y2="7" />
+                            </svg>
+                            <span class="adm-label">Categories</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="adm-link" href="Products.aspx" title="Products">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" />
+                            </svg>
+                            <span class="adm-label">Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="adm-link" href="Users.aspx" title="Users">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+                            </svg>
+                            <span class="adm-label">Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="adm-link" href="Orders.aspx" title="Orders &amp; Reports">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="18" height="18" rx="2" /><line x1="8" y1="17" x2="8" y2="12" /><line x1="12" y1="17" x2="12" y2="8" /><line x1="16" y1="17" x2="16" y2="14" />
+                            </svg>
+                            <span class="adm-label">Orders &amp; Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="adm-link" href="Payments.aspx" title="Payments">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" />
+                            </svg>
+                            <span class="adm-label">Payments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="adm-link" href="EditProfile.aspx" title="Edit Profile">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4" /><circle cx="18" cy="17" r="2.5" /><path d="M18 13v1.5M18 19.5V21M14 17h1.5M20.5 17H22M15.2 14.2l1 1M19.8 18.8l1 1M15.2 19.8l1-1M19.8 15.2l1-1" />
+                            </svg>
+                            <span class="adm-label">Edit Profile</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="adm-bottom">
+                    <a class="adm-link" href="Login.aspx" title="Logout">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span class="adm-label">Logout</span>
+                    </a>
+                </div>
+            </aside>
+
+            <main class="adm-main">
+                <asp:ContentPlaceHolder ID="AdminContent" runat="server" />
+            </main>
+        </div>
+    </form>
+
+    <%-- Highlights the nav item for the current page. Friendly URLs serve pages
+         without ".aspx", so both sides drop the extension before comparing. --%>
+    <script>
+        (function () {
+            function fileName(path) {
+                return (path || '').toLowerCase().split('?')[0].split('#')[0].split('/').pop().replace(/\.aspx$/, '');
+            }
+
+            var current = fileName(location.pathname);
+            var links = document.querySelectorAll('.admin-shell .adm-nav .adm-link');
+            Array.prototype.forEach.call(links, function (link) {
+                if (current && fileName(link.getAttribute('href')) === current) {
+                    link.classList.add('is-active');
+                    link.setAttribute('aria-current', 'page');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
