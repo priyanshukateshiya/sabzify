@@ -428,6 +428,24 @@
             font-size: 12.5px;
         }
 
+        .profile-page .pf-code--fixed {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+            padding: 0 12px;
+            background: #F9FAFB;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .profile-page input.pf-input[readonly] {
+            background-color: #F9FAFB !important;
+            color: #6B7280 !important;
+            cursor: not-allowed;
+            border-color: #E5E7EB !important;
+        }
+
         .profile-page .pf-code:focus {
             border-color: #1B6E2A;
             box-shadow: 0 0 0 3px rgba(27, 110, 42, .14);
@@ -469,6 +487,35 @@
             font-size: 11px;
             line-height: 1.35;
             color: #C0392B;
+        }
+
+        /* The rule above positions a .field-error against its .pf-field. The photo
+           validators sit in .pf-photo instead, so they flow normally there. */
+        .profile-page .pf-photo-error {
+            position: static;
+            margin-top: 6px;
+        }
+
+        /* Shown when a photo was too large for ASP.NET to parse at all, so no
+           validator could run. */
+        .profile-page .pf-alert {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border: 1px solid #F5C6C2;
+            border-radius: 8px;
+            margin: 0 0 16px;
+            background: #FDF3F2;
+            font-size: 12px;
+            color: #A93226;
+        }
+
+        .profile-page .pf-alert svg {
+            width: 16px;
+            height: 16px;
+            flex: 0 0 auto;
+            fill: currentColor;
         }
 
         /* Footer buttons (edit mode only) --------------------------------------- */
@@ -596,12 +643,12 @@
                 <div class="pf-card pf-user">
                     <div class="pf-avatar"></div>
                     <div>
-                        <div class="pf-user-name">Pratik Nakum</div>
+                        <div class="pf-user-name"><%: CurrentUserName %></div>
                         <div class="pf-user-place">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
                             </svg>
-                            Rajkot, Gujarat
+                            <%: CurrentUserLocation %>
                         </div>
                     </div>
                 </div>
@@ -643,7 +690,7 @@
 
                     <div class="pf-nav-divider"></div>
 
-                    <a class="pf-nav-item pf-nav-item--logout" href="Login.aspx">
+                    <a class="pf-nav-item pf-nav-item--logout" href="Logout.aspx">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5zm6.6 4L15.2 8.4 17.8 11H9v2h8.8l-2.6 2.6L16.6 17 21.6 12z" />
                         </svg>
@@ -672,6 +719,20 @@
 
                     <div class="pf-divider"></div>
 
+                    <%-- A photo over httpRuntime maxRequestLength is rejected while
+                         ASP.NET is still parsing the body, before Page_Load, so
+                         cvPhotoSize never gets to run. Global.asax redirects back
+                         here with a flag instead. With JavaScript on, the client-side
+                         size check stops the upload first and this never appears. --%>
+                    <asp:PlaceHolder ID="phUploadTooLarge" runat="server" Visible="false">
+                        <div class="pf-alert" role="alert">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 2 1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z" />
+                            </svg>
+                            That photo was too large to upload. Please choose an image of 2 MB or less.
+                        </div>
+                    </asp:PlaceHolder>
+
                     <div class="pf-photo">
                         <div class="pf-photo-avatar"></div>
                         <div>
@@ -687,6 +748,30 @@
                             </div>
                             <div class="pf-photo-hint">Drag and drop or click to upload. JPG, PNG or GIF.</div>
                             <asp:FileUpload ID="fuPhoto" runat="server" CssClass="pf-file" />
+                            <%-- The hint above states the rules, so they are enforced here.
+                                 No SetFocusOnError: .pf-file is off-screen, so focusing it
+                                 would scroll to nothing. Case-insensitive via character
+                                 classes - the client script runs this as a JavaScript
+                                 RegExp, which does not understand the .NET (?i) flag.
+                                 Both pass on an empty box: keeping the current photo is
+                                 valid. --%>
+                            <asp:RegularExpressionValidator ID="revPhotoType" runat="server" ControlToValidate="fuPhoto"
+                                ValidationExpression="^$|.+\.([Jj][Pp][Gg]|[Jj][Pp][Ee][Gg]|[Pp][Nn][Gg]|[Gg][Ii][Ff])$"
+                                Text="Use a JPG, PNG or GIF file"
+                                ErrorMessage=""
+                                ValidationGroup="Profile" Display="Dynamic"
+                                CssClass="field-error pf-photo-error" />
+                            <%-- Checked on both sides: the client function measures the file
+                                 with the File API so an oversized photo is never uploaded at
+                                 all, and the server handler stays the authority for anyone
+                                 with JavaScript off. --%>
+                            <asp:CustomValidator ID="cvPhotoSize" runat="server" ControlToValidate="fuPhoto"
+                                ValidateEmptyText="true" OnServerValidate="cvPhotoSize_ServerValidate"
+                                ClientValidationFunction="sabzifyValidatePhotoSize" data-max-bytes="2097152"
+                                Text="Photo must be 2 MB or smaller"
+                                ErrorMessage=""
+                                ValidationGroup="Profile" Display="Dynamic"
+                                CssClass="field-error pf-photo-error" />
                         </div>
                     </div>
 
@@ -694,7 +779,7 @@
 
                         <div class="pf-field">
                             <label class="pf-label" for="<%= txtFirstName.ClientID %>">First Name</label>
-                            <asp:TextBox ID="txtFirstName" runat="server" CssClass="pf-input" Text="Pratik" />
+                            <asp:TextBox ID="txtFirstName" MaxLength="50" runat="server" CssClass="pf-input" />
                             <asp:RequiredFieldValidator ID="rfvFirstName" runat="server"
                                 ControlToValidate="txtFirstName"
                                 Text="First name is required"
@@ -716,7 +801,7 @@
 
                         <div class="pf-field">
                             <label class="pf-label" for="<%= txtLastName.ClientID %>">Last Name</label>
-                            <asp:TextBox ID="txtLastName" runat="server" CssClass="pf-input" Text="Nakum" />
+                            <asp:TextBox ID="txtLastName" MaxLength="50" runat="server" CssClass="pf-input" />
                             <asp:RequiredFieldValidator ID="rfvLastName" runat="server"
                                 ControlToValidate="txtLastName"
                                 Text="Last name is required"
@@ -742,55 +827,19 @@
                                 <svg class="pf-input-icon" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 8L4.4 7.2 3.6 8.4 12 14.5l8.4-6.1-.8-1.2z" />
                                 </svg>
-                                <asp:TextBox ID="txtEmail" runat="server" CssClass="pf-input pf-input--icon" Text="pratik.nakum@example.com" />
+                                <asp:TextBox ID="txtEmail" runat="server" CssClass="pf-input pf-input--icon" ReadOnly="true" />
                             </span>
-                            <asp:RequiredFieldValidator ID="rfvEmail" runat="server"
-                                ControlToValidate="txtEmail"
-                                Text="Email is required"
-                                ErrorMessage=""
-                                ValidationGroup="Profile"
-                                Display="Dynamic"
-                                CssClass="field-error"
-                                SetFocusOnError="true" />
-                            <asp:RegularExpressionValidator ID="revEmail" runat="server"
-                                ControlToValidate="txtEmail"
-                                ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$"
-                                Text="Enter a valid email"
-                                ErrorMessage=""
-                                ValidationGroup="Profile"
-                                Display="Dynamic"
-                                CssClass="field-error"
-                                SetFocusOnError="true" />
                         </div>
 
                         <div class="pf-field pf-field--wide">
                             <label class="pf-label" for="<%= txtPhone.ClientID %>">Phone Number</label>
                             <span class="pf-phone">
-                                <asp:DropDownList ID="ddlCode" runat="server" CssClass="pf-code">
+                                <span class="pf-code pf-code--fixed">+91</span>
+                                <asp:DropDownList ID="ddlCode" runat="server" CssClass="visually-hidden">
                                     <asp:ListItem Value="+91" Selected="True">+91</asp:ListItem>
-                                    <asp:ListItem Value="+1">+1</asp:ListItem>
-                                    <asp:ListItem Value="+44">+44</asp:ListItem>
-                                    <asp:ListItem Value="+971">+971</asp:ListItem>
                                 </asp:DropDownList>
-                                <asp:TextBox ID="txtPhone" runat="server" CssClass="pf-input" Text="98765 43210" />
+                                <asp:TextBox ID="txtPhone" runat="server" CssClass="pf-input" ReadOnly="true" />
                             </span>
-                            <asp:RequiredFieldValidator ID="rfvPhone" runat="server"
-                                ControlToValidate="txtPhone"
-                                Text="Phone number is required"
-                                ErrorMessage=""
-                                ValidationGroup="Profile"
-                                Display="Dynamic"
-                                CssClass="field-error"
-                                SetFocusOnError="true" />
-                            <asp:RegularExpressionValidator ID="revPhone" runat="server"
-                                ControlToValidate="txtPhone"
-                                ValidationExpression="^[6-9]\d{4}[\s-]?\d{5}$"
-                                Text="Enter a valid 10-digit mobile number"
-                                ErrorMessage=""
-                                ValidationGroup="Profile"
-                                Display="Dynamic"
-                                CssClass="field-error"
-                                SetFocusOnError="true" />
                         </div>
 
                     </div>
@@ -809,7 +858,8 @@
                         <asp:Button ID="btnSave" runat="server"
                             Text="Save Changes"
                             CssClass="pf-save"
-                            ValidationGroup="Profile" />
+                            ValidationGroup="Profile"
+                            OnClick="btnSave_Click" />
                     </div>
 
                 </div>
@@ -818,6 +868,45 @@
         </div>
 
     </div>
+
+    <%-- Client-side twin of cvPhotoSize_ServerValidate.
+         This MUST be a global function and MUST live in its own script block:
+         WebUIValidation.js resolves ClientValidationFunction by name in global
+         scope, so a function declared inside the IIFE below would be invisible
+         to it, and the resulting error would NOT cancel the post - the
+         oversized body would be uploaded anyway. --%>
+    <script type="text/javascript">
+        window.sabzifyValidatePhotoSize = function (source, args) {
+            // Fail OPEN: anything we cannot measure is left to the server validator.
+            args.IsValid = true;
+            try {
+                var max = parseInt(source.getAttribute('data-max-bytes'), 10);
+                if (!(max > 0)) { max = 2 * 1024 * 1024; }
+
+                // args.Value is only "C:\\fakepath\\photo.jpg" - it carries no size,
+                // so the real <input type="file"> has to be read instead. ASP.NET
+                // hangs controltovalidate on the validator span as a JS expando.
+                var id = source.controltovalidate;
+                if (typeof id !== 'string' || !id) { return; }
+
+                var input = document.getElementById(id);
+                // No element, or no File API (very old browsers): stay valid.
+                if (!input || !input.files) { return; }
+
+                // ValidateEmptyText="true" means we are called even with no file
+                // chosen. Keeping the current photo is legal, so that is valid.
+                if (input.files.length === 0) { return; }
+
+                for (var i = 0; i < input.files.length; i++) {
+                    var size = input.files[i].size;
+                    if (typeof size !== 'number') { return; }   // unmeasurable: fail open
+                    if (size > max) { args.IsValid = false; return; }
+                }
+            } catch (e) {
+                args.IsValid = true;
+            }
+        };
+    </script>
 
     <%-- UI-only mode switching. No validation lives here: the ASP.NET
          validators own that. Every control below is type="button", so the
@@ -844,6 +933,10 @@
             // live select (pointer-events off in view mode) so it still posts.
             function setEditing(on) {
                 for (var i = 0; i < texts.length; i++) {
+                    if (texts[i].id.indexOf('txtEmail') !== -1 || texts[i].id.indexOf('txtPhone') !== -1) {
+                        texts[i].setAttribute('readonly', 'readonly');
+                        continue;
+                    }
                     if (on) {
                         texts[i].removeAttribute('readonly');
                     } else {

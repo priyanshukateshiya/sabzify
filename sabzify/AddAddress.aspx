@@ -342,7 +342,7 @@
 
                 <div class="aa-field">
                     <label class="aa-label" for="<%= txtFullName.ClientID %>">Full Name</label>
-                    <asp:TextBox ID="txtFullName" runat="server" CssClass="aa-input" placeholder="Enter your full name" />
+                    <asp:TextBox ID="txtFullName" MaxLength="100" runat="server" CssClass="aa-input" placeholder="Enter your full name" />
                     <asp:RequiredFieldValidator ID="rfvFullName" runat="server"
                         ControlToValidate="txtFullName"
                         Text="Full name is required"
@@ -368,7 +368,7 @@
                         <asp:DropDownList ID="ddlCode" runat="server" CssClass="aa-code">
                             <asp:ListItem Value="+91" Selected="True">+91</asp:ListItem>
                         </asp:DropDownList>
-                        <asp:TextBox ID="txtPhone" runat="server" CssClass="aa-input" placeholder="10-digit mobile number" />
+                        <asp:TextBox ID="txtPhone" MaxLength="10" runat="server" CssClass="aa-input" placeholder="10-digit mobile number" />
                     </span>
                     <asp:RequiredFieldValidator ID="rfvPhone" runat="server"
                         ControlToValidate="txtPhone"
@@ -393,7 +393,7 @@
 
             <div class="aa-field">
                 <label class="aa-label" for="<%= txtBuilding.ClientID %>">Flat, House no., Building, Company, Apartment</label>
-                <asp:TextBox ID="txtBuilding" runat="server" CssClass="aa-input" placeholder="Enter building details" />
+                <asp:TextBox ID="txtBuilding" MaxLength="150" runat="server" CssClass="aa-input" placeholder="Enter building details" />
                 <asp:RequiredFieldValidator ID="rfvBuilding" runat="server"
                     ControlToValidate="txtBuilding"
                     Text="Building details are required"
@@ -415,7 +415,7 @@
 
             <div class="aa-field">
                 <label class="aa-label" for="<%= txtArea.ClientID %>">Area, Colony, Street, Sector, Village</label>
-                <asp:TextBox ID="txtArea" runat="server" CssClass="aa-input" placeholder="Enter area details" />
+                <asp:TextBox ID="txtArea" MaxLength="150" runat="server" CssClass="aa-input" placeholder="Enter area details" />
                 <asp:RequiredFieldValidator ID="rfvArea" runat="server"
                     ControlToValidate="txtArea"
                     Text="Area details are required"
@@ -439,7 +439,7 @@
                  RegularExpressionValidator passes on empty input. --%>
             <div class="aa-field">
                 <label class="aa-label" for="<%= txtLandmark.ClientID %>">Landmark (Optional)</label>
-                <asp:TextBox ID="txtLandmark" runat="server" CssClass="aa-input" placeholder="E.g. Near Apollo Hospital" />
+                <asp:TextBox ID="txtLandmark" MaxLength="100" runat="server" CssClass="aa-input" placeholder="E.g. Near Apollo Hospital" />
                 <asp:RegularExpressionValidator ID="revLandmark" runat="server"
                     ControlToValidate="txtLandmark"
                     ValidationExpression="^.{0,100}$"
@@ -455,7 +455,7 @@
 
                 <div class="aa-field">
                     <label class="aa-label" for="<%= txtPincode.ClientID %>">Pincode</label>
-                    <asp:TextBox ID="txtPincode" runat="server" CssClass="aa-input" Text="360001" />
+                    <asp:TextBox ID="txtPincode" MaxLength="6" runat="server" CssClass="aa-input" Text="360001" />
                     <asp:RequiredFieldValidator ID="rfvPincode" runat="server"
                         ControlToValidate="txtPincode"
                         Text="Pincode is required"
@@ -477,7 +477,7 @@
 
                 <div class="aa-field">
                     <label class="aa-label" for="<%= txtCity.ClientID %>">City</label>
-                    <asp:TextBox ID="txtCity" runat="server" CssClass="aa-input aa-input--filled" Text="Rajkot" />
+                    <asp:TextBox ID="txtCity" MaxLength="50" runat="server" CssClass="aa-input aa-input--filled" Text="Rajkot" />
                     <asp:RequiredFieldValidator ID="rfvCity" runat="server"
                         ControlToValidate="txtCity"
                         Text="City is required"
@@ -569,7 +569,8 @@
                 <asp:Button ID="btnSave" runat="server"
                     Text="Save Address"
                     CssClass="aa-save"
-                    ValidationGroup="Address" />
+                    ValidationGroup="Address"
+                    OnClick="btnSave_Click" />
                 <%-- A plain link, so Cancel can never trigger validation. --%>
                 <a class="aa-cancel" href="SavedAddresses.aspx">Cancel</a>
             </div>

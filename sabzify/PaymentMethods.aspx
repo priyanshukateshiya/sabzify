@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Payment Methods" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PaymentMethods.aspx.cs" Inherits="sabzify.PaymentMethods" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Payment Methods" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PaymentMethods.aspx.cs" Inherits="sabzify.PaymentMethods" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="PaymentMethodsContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -253,12 +253,12 @@
                 <div class="pf-card pf-user">
                     <div class="pf-avatar"></div>
                     <div>
-                        <div class="pf-user-name">Pratik Nakum</div>
+                        <div class="pf-user-name"><%: CurrentUserName %></div>
                         <div class="pf-user-place">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
                             </svg>
-                            Rajkot, Gujarat
+                            <%: CurrentUserLocation %>
                         </div>
                     </div>
                 </div>
@@ -300,7 +300,7 @@
 
                     <div class="pf-nav-divider"></div>
 
-                    <a class="pf-nav-item pf-nav-item--logout" href="Login.aspx">
+                    <a class="pf-nav-item pf-nav-item--logout" href="Logout.aspx">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5zm6.6 4L15.2 8.4 17.8 11H9v2h8.8l-2.6 2.6L16.6 17 21.6 12z" />
                         </svg>
@@ -314,11 +314,11 @@
                 <div class="pf-card pm-content">
 
                     <h1 class="pm-title">Payment Methods</h1>
-                    <p class="pm-sub">Manage your saved cards and UPI accounts for faster checkout.</p>
+                    <p class="pm-sub">Available payment methods for orders on Sabzify.</p>
 
                     <div class="pm-method">
                         <div class="pm-badge">&#8377;</div>
-                        <div class="pm-name">Cash On Delivery</div>
+                        <div class="pm-name">Cash on Delivery (COD)</div>
                     </div>
 
                 </div>

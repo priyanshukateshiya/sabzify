@@ -1,67 +1,58 @@
-﻿<%@ Page Title="My Orders" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MyOrders.aspx.cs" Inherits="sabzify.MyOrders" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="My Orders" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MyOrders.aspx.cs" Inherits="sabzify.MyOrders" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="MyOrdersContent" ContentPlaceHolderID="MainContent" runat="server">
 
-    <%-- Page-scoped styles. Every selector starts with .orders-page (the page
-         background is the one exception: it has to reach .site-main). --%>
     <style>
-        .site-main:has(.orders-page) {
-            background: #FAFCF5;
-        }
-
-        .orders-page {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 40px 24px 56px;
-            color: #111827;
+        .site-main:has(.acct-page) {
+            background: #F3F7EC;
         }
 
         /* Page header ------------------------------------------------------ */
-        .orders-page .orders-head {
-            margin-bottom: 26px;
+        .acct-page .orders-head {
+            margin-bottom: 22px;
         }
 
-        .orders-page h1.orders-title {
+        .acct-page h1.orders-title {
             margin: 0 0 6px;
-            font-size: 30px;
+            font-size: 24px;
             font-weight: 700;
             color: #111827;
         }
 
-        .orders-page .orders-sub {
+        .acct-page .orders-sub {
             margin: 0;
             font-size: 13px;
             color: #6B7280;
         }
 
-        /* Two-column shell ------------------------------------------------- */
-        .orders-page .orders-cols {
+        /* Two-column orders display inside right panel ---------------------- */
+        .acct-page .orders-cols {
             display: flex;
             align-items: flex-start;
-            gap: 20px;
+            gap: 18px;
         }
 
-        .orders-page .orders-main {
+        .acct-page .orders-main {
             flex: 1 1 auto;
             min-width: 0;
         }
 
-        .orders-page .orders-side {
+        .acct-page .orders-side {
             display: flex;
-            flex: 0 0 330px;
+            flex: 0 0 290px;
             flex-direction: column;
             gap: 16px;
             min-width: 0;
         }
 
-        .orders-page .orders-card {
+        .acct-page .orders-card {
             border: 1px solid #EEF1EC;
             border-radius: 10px;
             background: #FFFFFF;
         }
 
         /* Status pills ----------------------------------------------------- */
-        .orders-page .orders-pill {
+        .acct-page .orders-pill {
             display: inline-flex;
             align-items: center;
             gap: 5px;
@@ -71,45 +62,45 @@
             font-weight: 600;
         }
 
-        .orders-page .orders-pill svg {
+        .acct-page .orders-pill svg {
             flex: none;
             width: 11px;
             height: 11px;
             fill: currentColor;
         }
 
-        .orders-page .orders-pill--pending {
+        .acct-page .orders-pill--pending {
             background: #FFF3E0;
             color: #E8871E;
         }
 
-        .orders-page .orders-pill--shipping {
+        .acct-page .orders-pill--shipping {
             background: #E8F1FB;
             color: #2D6CB5;
         }
 
-        .orders-page .orders-pill--done {
+        .acct-page .orders-pill--done {
             background: #E6F4EA;
             color: #1B7A3A;
         }
 
-        .orders-page .orders-pill--cancelled {
+        .acct-page .orders-pill--cancelled {
             background: #F3F4F6;
             color: #6B7280;
         }
 
         /* Featured order card ---------------------------------------------- */
-        .orders-page .orders-featured {
+        .acct-page .orders-featured {
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(17, 24, 39, .06);
             transition: opacity .25s ease;
         }
 
-        .orders-page .orders-featured.is-cancelled {
+        .acct-page .orders-featured.is-cancelled {
             opacity: .6;
         }
 
-        .orders-page .orders-featured-top {
+        .acct-page .orders-featured-top {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
@@ -117,54 +108,54 @@
             padding: 18px 20px;
         }
 
-        .orders-page .orders-featured-no {
+        .acct-page .orders-featured-no {
             margin: 10px 0 4px;
             font-size: 19px;
             font-weight: 600;
             color: #111827;
         }
 
-        .orders-page .orders-featured-date {
+        .acct-page .orders-featured-date {
             margin: 0;
             font-size: 11px;
             color: #6B7280;
         }
 
-        .orders-page .orders-featured-money {
+        .acct-page .orders-featured-money {
             flex: none;
             text-align: right;
         }
 
-        .orders-page .orders-featured-total {
+        .acct-page .orders-featured-total {
             font-size: 19px;
             font-weight: 700;
             color: #111827;
         }
 
-        .orders-page .orders-featured-count {
+        .acct-page .orders-featured-count {
             margin-top: 4px;
             font-size: 11px;
             color: #6B7280;
         }
 
         /* Item chips -------------------------------------------------------- */
-        .orders-page .orders-items {
+        .acct-page .orders-items {
             display: flex;
             gap: 12px;
             padding: 0 20px 18px;
         }
 
-        .orders-page .orders-chip {
+        .acct-page .orders-chip {
             display: flex;
             align-items: center;
             gap: 10px;
-            min-width: 150px;
+            min-width: 140px;
             padding: 8px 12px;
             border: 1px solid #EEF1EC;
             border-radius: 8px;
         }
 
-        .orders-page .orders-chip-thumb {
+        .acct-page .orders-chip-thumb {
             flex: none;
             width: 30px;
             height: 30px;
@@ -173,32 +164,32 @@
             background: #F4F6F2;
         }
 
-        .orders-page .orders-chip-thumb img {
+        .acct-page .orders-chip-thumb img {
             display: block;
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .orders-page .orders-chip-name {
+        .acct-page .orders-chip-name {
             font-size: 11px;
             font-weight: 600;
             color: #111827;
         }
 
-        .orders-page .orders-chip-unit {
+        .acct-page .orders-chip-unit {
             margin-top: 2px;
             font-size: 10px;
             color: #6B7280;
         }
 
-        .orders-page .orders-divider {
+        .acct-page .orders-divider {
             height: 1px;
             background: #F1F3EF;
         }
 
         /* Featured footer --------------------------------------------------- */
-        .orders-page .orders-featured-foot {
+        .acct-page .orders-featured-foot {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -206,7 +197,7 @@
             padding: 14px 20px;
         }
 
-        .orders-page .orders-btn {
+        .acct-page .orders-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -221,36 +212,36 @@
             cursor: pointer;
         }
 
-        .orders-page .orders-btn:hover {
+        .acct-page .orders-btn:hover {
             background: #F6F8F4;
         }
 
-        .orders-page .orders-btn--cancel {
+        .acct-page .orders-btn--cancel {
             border-color: #E8B4B4;
             color: #C0392B;
         }
 
-        .orders-page .orders-btn--cancel:hover {
+        .acct-page .orders-btn--cancel:hover {
             background: #FDF3F3;
         }
 
         /* Inline confirm row ------------------------------------------------ */
-        .orders-page .orders-confirm {
+        .acct-page .orders-confirm {
             display: none;
             align-items: center;
             gap: 10px;
         }
 
-        .orders-page .orders-confirm.is-shown {
+        .acct-page .orders-confirm.is-shown {
             display: flex;
         }
 
-        .orders-page .orders-confirm-text {
+        .acct-page .orders-confirm-text {
             font-size: 12px;
             color: #374151;
         }
 
-        .orders-page .orders-confirm-yes {
+        .acct-page .orders-confirm-yes {
             height: 28px;
             padding: 0 12px;
             border: none;
@@ -263,11 +254,11 @@
             cursor: pointer;
         }
 
-        .orders-page .orders-confirm-yes:hover {
+        .acct-page .orders-confirm-yes:hover {
             background: #A93226;
         }
 
-        .orders-page .orders-confirm-no {
+        .acct-page .orders-confirm-no {
             height: 28px;
             padding: 0 12px;
             border: 1px solid #C9D3C4;
@@ -279,29 +270,29 @@
             cursor: pointer;
         }
 
-        .orders-page .orders-confirm-no:hover {
+        .acct-page .orders-confirm-no:hover {
             background: #F6F8F4;
         }
 
         /* Side cards -------------------------------------------------------- */
-        .orders-page .orders-side .orders-card {
+        .acct-page .orders-side .orders-card {
             padding: 16px;
         }
 
-        .orders-page .orders-side-no {
+        .acct-page .orders-side-no {
             margin: 10px 0 4px;
             font-size: 15px;
             font-weight: 600;
             color: #111827;
         }
 
-        .orders-page .orders-side-date {
+        .acct-page .orders-side-date {
             margin: 0;
             font-size: 10px;
             color: #6B7280;
         }
 
-        .orders-page .orders-side-row {
+        .acct-page .orders-side-row {
             display: flex;
             align-items: baseline;
             justify-content: space-between;
@@ -309,19 +300,19 @@
             margin-top: 12px;
         }
 
-        .orders-page .orders-side-total {
+        .acct-page .orders-side-total {
             font-size: 17px;
             font-weight: 700;
             color: #111827;
         }
 
-        .orders-page .orders-side-note {
+        .acct-page .orders-side-note {
             font-size: 10px;
             color: #6B7280;
             text-align: right;
         }
 
-        .orders-page .orders-side-btn {
+        .acct-page .orders-side-btn {
             display: block;
             width: 100%;
             height: 34px;
@@ -337,33 +328,33 @@
             cursor: pointer;
         }
 
-        .orders-page .orders-side-btn:hover {
+        .acct-page .orders-side-btn:hover {
             background: #F4F7FB;
         }
 
         /* Delivered card ---------------------------------------------------- */
-        .orders-page .orders-done-top {
+        .acct-page .orders-done-top {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             gap: 12px;
         }
 
-        .orders-page .orders-done-total {
+        .acct-page .orders-done-total {
             flex: none;
             font-size: 15px;
             font-weight: 700;
             color: #111827;
         }
 
-        .orders-page .orders-done-no {
+        .acct-page .orders-done-no {
             margin: 12px 0 4px;
             font-size: 15px;
             font-weight: 600;
             color: #111827;
         }
 
-        .orders-page .orders-link {
+        .acct-page .orders-link {
             display: inline-flex;
             align-items: center;
             gap: 4px;
@@ -378,171 +369,231 @@
             cursor: pointer;
         }
 
-        .orders-page .orders-link:hover {
+        .acct-page .orders-link:hover {
             text-decoration: underline;
         }
 
-        /* Responsive -------------------------------------------------------- */
-        @media (max-width: 1024px) {
-            .orders-page .orders-side {
-                flex-basis: 300px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .orders-page .orders-cols {
+        @media (max-width: 900px) {
+            .acct-page .orders-cols {
                 display: block;
             }
 
-            .orders-page .orders-side {
+            .acct-page .orders-side {
                 margin-top: 16px;
-            }
-
-            .orders-page h1.orders-title {
-                font-size: 24px;
-            }
-
-            .orders-page .orders-items {
-                flex-wrap: wrap;
+                flex-basis: auto;
             }
         }
 
         @media (max-width: 480px) {
-            .orders-page .orders-featured-top {
+            .acct-page .orders-featured-top {
                 display: block;
             }
 
-            .orders-page .orders-featured-money {
+            .acct-page .orders-featured-money {
                 margin-top: 12px;
                 text-align: left;
             }
 
-            .orders-page .orders-items {
+            .acct-page .orders-items {
                 display: block;
             }
 
-            .orders-page .orders-chip {
+            .acct-page .orders-chip {
                 min-width: 0;
             }
 
-            .orders-page .orders-chip + .orders-chip {
+            .acct-page .orders-chip + .orders-chip {
                 margin-top: 12px;
             }
 
-            .orders-page .orders-featured-foot {
+            .acct-page .orders-featured-foot {
                 display: block;
             }
 
-            .orders-page .orders-featured-foot .orders-btn {
+            .acct-page .orders-featured-foot .orders-btn {
                 width: 100%;
             }
 
-            .orders-page .orders-featured-foot .orders-btn + .orders-btn {
+            .acct-page .orders-featured-foot .orders-btn + .orders-btn {
                 margin-top: 8px;
             }
 
-            .orders-page .orders-confirm {
+            .acct-page .orders-confirm {
                 flex-wrap: wrap;
             }
         }
     </style>
 
-    <div class="orders-page">
+    <div class="acct-page">
 
-        <div class="orders-head">
-            <h1 class="orders-title">My Orders</h1>
-            <p class="orders-sub">Review your recent purchases and their delivery status.</p>
-        </div>
+        <div class="pf-cols">
 
-        <div class="orders-cols">
+            <div class="pf-side">
 
-            <div class="orders-main">
-                <div class="orders-card orders-featured" id="ordFeatured">
-
-                    <div class="orders-featured-top">
-                        <div>
-                            <span class="orders-pill orders-pill--pending" id="ordPill">
-                                <svg viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 5v5.3l3.7 2.2-1 1.6-4.7-2.8V7z" />
-                                </svg>
-                                <span id="ordPillText">Pending</span>
-                            </span>
-                            <h2 class="orders-featured-no">Order #ORD003</h2>
-                            <p class="orders-featured-date">Placed on Oct 24, 2023</p>
-                        </div>
-                        <div class="orders-featured-money">
-                            <div class="orders-featured-total">&#8377;1,240</div>
-                            <div class="orders-featured-count">3 items</div>
+                <div class="pf-card pf-user">
+                    <div class="pf-avatar"></div>
+                    <div>
+                        <div class="pf-user-name"><%: CurrentUserName %></div>
+                        <div class="pf-user-place">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
+                            </svg>
+                            <%: CurrentUserLocation %>
                         </div>
                     </div>
-
-                    <div class="orders-items">
-                        <div class="orders-chip">
-                            <div class="orders-chip-thumb">
-                                <img src="Content/Images/palak.jpg" alt="Fresh Spinach" />
-                            </div>
-                            <div>
-                                <div class="orders-chip-name">Fresh Spinach</div>
-                                <div class="orders-chip-unit">500g</div>
-                            </div>
-                        </div>
-                        <div class="orders-chip">
-                            <div class="orders-chip-thumb">
-                                <img src="Content/Images/tomato.png" alt="Farm Tomatoes" />
-                            </div>
-                            <div>
-                                <div class="orders-chip-name">Farm Tomatoes</div>
-                                <div class="orders-chip-unit">1kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="orders-divider"></div>
-
-                    <div class="orders-featured-foot">
-                        <button type="button" class="orders-btn orders-view">View Details</button>
-                        <button type="button" class="orders-btn orders-btn--cancel" id="ordCancel">Cancel Order</button>
-                        <div class="orders-confirm" id="ordConfirm">
-                            <span class="orders-confirm-text">Cancel this order?</span>
-                            <button type="button" class="orders-confirm-yes" id="ordYes">Yes, cancel</button>
-                            <button type="button" class="orders-confirm-no" id="ordNo">Keep order</button>
-                        </div>
-                    </div>
-
                 </div>
+
+                <div class="pf-card pf-nav">
+                    <div class="pf-nav-heading">My Account</div>
+                    <div class="pf-nav-list">
+                        <a class="pf-nav-item" href="Profile.aspx">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z" />
+                            </svg>
+                            Profile Information
+                        </a>
+                        <a class="pf-nav-item is-active" href="MyOrders.aspx">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M4 4h16v3H4zm1 5h14v11H5zm3 3v1.6h8V12zm0 4v1.6h5V16z" />
+                            </svg>
+                            My Orders
+                        </a>
+                        <a class="pf-nav-item" href="Wishlist.aspx">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 20.5 4.2 13a4.8 4.8 0 0 1 0-6.8 4.8 4.8 0 0 1 6.8 0l1 1 1-1a4.8 4.8 0 0 1 6.8 0 4.8 4.8 0 0 1 0 6.8z" />
+                            </svg>
+                            Wishlist
+                        </a>
+                        <a class="pf-nav-item" href="SavedAddresses.aspx">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
+                            </svg>
+                            Saved Addresses
+                        </a>
+                        <a class="pf-nav-item" href="PaymentMethods.aspx">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 5h18a1 1 0 0 1 1 1v3H2V6a1 1 0 0 1 1-1zM2 11h20v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-7zm3 4v2h5v-2H5z" />
+                            </svg>
+                            Payment Methods
+                        </a>
+                    </div>
+
+                    <div class="pf-nav-divider"></div>
+
+                    <a class="pf-nav-item pf-nav-item--logout" href="Logout.aspx">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5zm6.6 4L15.2 8.4 17.8 11H9v2h8.8l-2.6 2.6L16.6 17 21.6 12z" />
+                        </svg>
+                        Logout
+                    </a>
+                </div>
+
             </div>
 
-            <div class="orders-side">
+            <div class="pf-main">
 
-                <div class="orders-card">
-                    <span class="orders-pill orders-pill--shipping">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M3 5h11v10H3zm12 3h3.5l2.5 3v4h-6zM7 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm11 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
-                        </svg>
-                        Out for Delivery
-                    </span>
-                    <div class="orders-side-no">Order #ORD002</div>
-                    <p class="orders-side-date">Placed on Oct 23, 2023</p>
-                    <div class="orders-side-row">
-                        <span class="orders-side-total">&#8377;850</span>
-                        <span class="orders-side-note">Expected today by 6 PM</span>
-                    </div>
-                    <button type="button" class="orders-side-btn orders-view">View Details</button>
+                <div class="orders-head">
+                    <h1 class="orders-title">My Orders</h1>
+                    <p class="orders-sub">Review your recent purchases and their delivery status.</p>
                 </div>
 
-                <div class="orders-card">
-                    <div class="orders-done-top">
-                        <span class="orders-pill orders-pill--done">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 14.4-4-4L8.4 11l2.6 2.6L15.6 9 17 10.4z" />
-                            </svg>
-                            Delivered
-                        </span>
-                        <span class="orders-done-total">&#8377;2,100</span>
+                <div class="orders-cols">
+
+                    <div class="orders-main">
+                        <div class="orders-card orders-featured" id="ordFeatured">
+
+                            <div class="orders-featured-top">
+                                <div>
+                                    <span class="orders-pill orders-pill--pending" id="ordPill">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 5v5.3l3.7 2.2-1 1.6-4.7-2.8V7z" />
+                                        </svg>
+                                        <span id="ordPillText">Pending</span>
+                                    </span>
+                                    <h2 class="orders-featured-no">Order #ORD003</h2>
+                                    <p class="orders-featured-date">Placed on Oct 24, 2023</p>
+                                    <p class="orders-featured-date" style="margin-top:2px; color:#166534;">Payment: <strong>Cash on Delivery (COD)</strong></p>
+                                </div>
+                                <div class="orders-featured-money">
+                                    <div class="orders-featured-total">&#8377;1,240</div>
+                                    <div class="orders-featured-count">3 items</div>
+                                </div>
+                            </div>
+
+                            <div class="orders-items">
+                                <div class="orders-chip">
+                                    <div class="orders-chip-thumb">
+                                        <img src="Content/Images/palak.jpg" alt="Fresh Spinach" />
+                                    </div>
+                                    <div>
+                                        <div class="orders-chip-name">Fresh Spinach</div>
+                                        <div class="orders-chip-unit">500g</div>
+                                    </div>
+                                </div>
+                                <div class="orders-chip">
+                                    <div class="orders-chip-thumb">
+                                        <img src="Content/Images/tomato.png" alt="Farm Tomatoes" />
+                                    </div>
+                                    <div>
+                                        <div class="orders-chip-name">Farm Tomatoes</div>
+                                        <div class="orders-chip-unit">1kg</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="orders-divider"></div>
+
+                            <div class="orders-featured-foot">
+                                <a href="Bill.aspx?orderId=ORD003" class="orders-btn orders-view" style="display:inline-flex; align-items:center; text-decoration:none;">View Bill</a>
+                                <a href="TrackOrder.aspx" class="orders-btn" style="display:inline-flex; align-items:center; text-decoration:none;">Track Order</a>
+                                <button type="button" class="orders-btn orders-btn--cancel" id="ordCancel">Cancel Order</button>
+                                <div class="orders-confirm" id="ordConfirm">
+                                    <span class="orders-confirm-text">Cancel this order?</span>
+                                    <button type="button" class="orders-confirm-yes" id="ordYes">Yes, cancel</button>
+                                    <button type="button" class="orders-confirm-no" id="ordNo">Keep order</button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                    <div class="orders-done-no">Order #ORD001</div>
-                    <p class="orders-side-date">Delivered on Oct 20, 2023</p>
-                    <button type="button" class="orders-link orders-view">View Details &#8594;</button>
+
+                    <div class="orders-side">
+
+                        <div class="orders-card">
+                            <span class="orders-pill orders-pill--shipping">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M3 5h11v10H3zm12 3h3.5l2.5 3v4h-6zM7 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm11 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+                                </svg>
+                                Out for Delivery
+                            </span>
+                            <div class="orders-side-no">Order #ORD002</div>
+                            <p class="orders-side-date">Placed on Oct 23, 2023</p>
+                            <p class="orders-side-date" style="margin-top:2px; color:#166534;">Payment: <strong>Cash on Delivery (COD)</strong></p>
+                            <div class="orders-side-row">
+                                <span class="orders-side-total">&#8377;850</span>
+                                <span class="orders-side-note">Expected today by 6 PM</span>
+                            </div>
+                            <a href="Bill.aspx?orderId=ORD002" class="orders-side-btn orders-view" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">View Bill</a>
+                        </div>
+
+                        <div class="orders-card">
+                            <div class="orders-done-top">
+                                <span class="orders-pill orders-pill--done">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 14.4-4-4L8.4 11l2.6 2.6L15.6 9 17 10.4z" />
+                                    </svg>
+                                    Delivered
+                                </span>
+                                <span class="orders-done-total">&#8377;2,100</span>
+                            </div>
+                            <div class="orders-done-no">Order #ORD001</div>
+                            <p class="orders-side-date">Delivered on Oct 20, 2023</p>
+                            <p class="orders-side-date" style="margin-top:2px; color:#166534;">Payment: <strong>Cash on Delivery (COD)</strong></p>
+                            <a href="Bill.aspx?orderId=ORD001" class="orders-link orders-view" style="display:inline-flex; align-items:center; text-decoration:none;">View Bill &#8594;</a>
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
@@ -551,9 +602,6 @@
 
     </div>
 
-    <%-- UI-only behaviour: the inline cancel confirmation and the View Details
-         links. No validation here, and every button is type="button" so
-         nothing posts back. --%>
     <script type="text/javascript">
         (function () {
             var cancelBtn = document.getElementById('ordCancel');
@@ -576,13 +624,6 @@
                     pill.className = 'orders-pill orders-pill--cancelled';
                     pillText.textContent = 'Cancelled';
                     card.className = 'orders-card orders-featured is-cancelled';
-                };
-            }
-
-            var views = document.querySelectorAll('.orders-view');
-            for (var i = 0; i < views.length; i++) {
-                views[i].onclick = function () {
-                    window.location.href = 'TrackOrder.aspx';
                 };
             }
         })();

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Saved Addresses" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SavedAddresses.aspx.cs" Inherits="sabzify.SavedAddresses" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Saved Addresses" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SavedAddresses.aspx.cs" Inherits="sabzify.SavedAddresses" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="SavedAddressesContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -445,12 +445,12 @@
                 <div class="pf-card pf-user">
                     <div class="pf-avatar"></div>
                     <div>
-                        <div class="pf-user-name">Pratik Nakum</div>
+                        <div class="pf-user-name"><%: CurrentUserName %></div>
                         <div class="pf-user-place">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
                             </svg>
-                            Rajkot, Gujarat
+                            <%: CurrentUserLocation %>
                         </div>
                     </div>
                 </div>
@@ -492,7 +492,7 @@
 
                     <div class="pf-nav-divider"></div>
 
-                    <a class="pf-nav-item pf-nav-item--logout" href="Login.aspx">
+                    <a class="pf-nav-item pf-nav-item--logout" href="Logout.aspx">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5zm6.6 4L15.2 8.4 17.8 11H9v2h8.8l-2.6 2.6L16.6 17 21.6 12z" />
                         </svg>
@@ -527,7 +527,7 @@
                                 </span>
                                 <span class="sa-pill">Default</span>
                             </div>
-                            <div class="sa-name">Pratik Nakum</div>
+                            <div class="sa-name"><%: CurrentUserName %></div>
                             <div class="sa-lines">Near Sanskar Park Society<br />Rajkot - 360001</div>
                             <div class="sa-foot">
                                 <button type="button" class="sa-link sa-edit">Edit</button>
@@ -549,7 +549,7 @@
                                     Office
                                 </span>
                             </div>
-                            <div class="sa-name">Pratik Nakum</div>
+                            <div class="sa-name"><%: CurrentUserName %></div>
                             <div class="sa-lines">IT Park, Kalawad Road<br />Rajkot - 360005</div>
                             <div class="sa-foot">
                                 <button type="button" class="sa-link sa-edit">Edit</button>

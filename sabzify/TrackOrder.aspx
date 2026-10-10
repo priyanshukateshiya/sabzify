@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Track Your Order" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TrackOrder.aspx.cs" Inherits="sabzify.TrackOrder" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Track Your Order" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TrackOrder.aspx.cs" Inherits="sabzify.TrackOrder" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="TrackOrderContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -411,12 +411,6 @@
                     <div class="track-partner">
                         <div class="track-avatar"></div>
                         <div class="track-partner-name">Pratik Nakum</div>
-                        <%-- UI only: plain button, so it never posts back. --%>
-                        <button type="button" class="track-call" aria-label="Call Pratik Nakum">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z" />
-                            </svg>
-                        </button>
                     </div>
                 </div>
 

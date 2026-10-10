@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Order Confirmation" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrderConfirmation.aspx.cs" Inherits="sabzify.OrderConfirmation" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Order Confirmation" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrderConfirmation.aspx.cs" Inherits="sabzify.OrderConfirmation" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="OrderConfirmationContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -220,7 +220,7 @@
                         </svg>
                         <span class="oc-label">Payment Method</span>
                     </div>
-                    <div class="oc-value">UPI</div>
+                    <div class="oc-value">Cash on Delivery (COD)</div>
                 </div>
 
             </div>
