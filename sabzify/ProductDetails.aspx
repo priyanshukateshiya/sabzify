@@ -324,6 +324,15 @@
             background: #155822;
         }
 
+        /* Out of stock: Page_Load disables both buttons, so neither may keep
+           painting itself as clickable. */
+        .pd-page input.pd-btn:disabled {
+            background-color: #E5E7EB;
+            background-image: none;
+            color: #9CA3AF;
+            cursor: not-allowed;
+        }
+
         .pd-page .qty-error {
             position: absolute;
             top: calc(100% + 3px);
@@ -514,7 +523,7 @@
             <span aria-hidden="true">&#8250;</span>
             <a href="Vegetables.aspx">Vegetables</a>
             <span aria-hidden="true">&#8250;</span>
-            <span class="is-current" aria-current="page">Fresh Tomato</span>
+            <span class="is-current" aria-current="page"><%: CurrentProduct != null ? CurrentProduct.Name : "Product Details" %></span>
         </nav>
 
         <%-- ================= Product ================= --%>
@@ -522,19 +531,21 @@
 
             <div class="pd-gallery">
                 <div class="pd-main-img">
-                    <img id="pdMainImg" src="Content/Images/tomato.png" alt="Fresh Tomato" />
-                    <span class="pd-badge">15% OFF</span>
+                    <img id="pdMainImg" src="<%: ProductImageUrl %>" alt="<%: CurrentProduct != null ? CurrentProduct.Name : "Product" %>" />
+                    <% if (CurrentProduct != null && !string.IsNullOrEmpty(CurrentProduct.Badge)) { %>
+                    <span class="pd-badge"><%: CurrentProduct.Badge %></span>
+                    <% } %>
                 </div>
 
                 <div class="pd-thumbs">
-                    <button type="button" class="pd-thumb is-active" data-src="Content/Images/tomato.png" aria-label="Show photo 1">
-                        <img src="Content/Images/tomato.png" alt="" />
+                    <button type="button" class="pd-thumb is-active" data-src="<%: ProductImageUrl %>" aria-label="Show photo 1">
+                        <img src="<%: ProductImageUrl %>" alt="" />
                     </button>
-                    <button type="button" class="pd-thumb" data-src="Content/Images/tomato-crate.jpg" aria-label="Show photo 2">
-                        <img src="Content/Images/tomato-crate.jpg" alt="" />
+                    <button type="button" class="pd-thumb" data-src="<%: ProductImageUrl %>" aria-label="Show photo 2">
+                        <img src="<%: ProductImageUrl %>" alt="" />
                     </button>
-                    <button type="button" class="pd-thumb" data-src="Content/Images/tomato-sliced.jpg" aria-label="Show photo 3">
-                        <img src="Content/Images/tomato-sliced.jpg" alt="" />
+                    <button type="button" class="pd-thumb" data-src="<%: ProductImageUrl %>" aria-label="Show photo 3">
+                        <img src="<%: ProductImageUrl %>" alt="" />
                     </button>
                     <button type="button" class="pd-thumb pd-thumb--video" aria-label="Product video">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zM10 8v8l6-4-6-4z" /></svg>
@@ -543,25 +554,33 @@
             </div>
 
             <div class="pd-info">
+                <% if (CurrentProduct != null && CurrentProduct.IsOrganic) { %>
                 <span class="pd-pill">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 3C10 3 4 8 4 15c0 2.2.7 4.1 1.9 5.5L4 22.4 5.4 21l1.9-1.9C8.7 20.3 10.6 21 12.8 21 19.8 21 21 12 20 3zm-8.3 13.6c-.9 0-1.7-.2-2.4-.6 2.6-3.6 6-6.2 9.6-7.6-1.2 4.9-3.6 8.2-7.2 8.2z" /></svg>
                     Organic
                 </span>
+                <% } else if (CurrentProduct != null) { %>
+                <span class="pd-pill">
+                    <%: CurrentProduct.Category %>
+                </span>
+                <% } %>
 
-                <h1 class="pd-title">Fresh Tomato</h1>
+                <h1 class="pd-title"><%: CurrentProduct != null ? CurrentProduct.Name : "Product" %></h1>
 
                 <p class="pd-price">
-                    <span class="pd-price-now">&#8377;35</span>
-                    <span class="pd-price-unit">/ kg</span>
-                    <span class="pd-price-old">&#8377;42</span>
+                    <span class="pd-price-now">&#8377;<%: CurrentProduct != null ? CurrentProduct.Price.ToString("0") : "0" %></span>
+                    <span class="pd-price-unit">/ <%: CurrentProduct != null ? CurrentProduct.Unit : "kg" %></span>
+                    <% if (CurrentProduct != null && CurrentProduct.OldPrice.HasValue) { %>
+                    <span class="pd-price-old">&#8377;<%: CurrentProduct.OldPrice.Value.ToString("0") %></span>
+                    <% } %>
                 </p>
 
                 <p class="pd-stock">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 14.2-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" /></svg>
-                    In Stock - Ready to ship
+                    <%: CurrentProduct != null && CurrentProduct.StockQuantity > 0 ? "In Stock (" + CurrentProduct.StockQuantity + " available) - Ready to ship" : "Out of Stock" %>
                 </p>
 
-                <p class="pd-desc">Farm-fresh, juicy red tomatoes sourced directly from local farms in Gujarat. Hand-picked at peak ripeness to ensure maximum flavor and nutritional value. Perfect for curries, salads, or fresh homemade sauces.</p>
+                <p class="pd-desc"><%: CurrentProduct != null ? CurrentProduct.Description : "Fresh and premium quality vegetables delivered to your doorstep." %></p>
 
                 <hr class="pd-divider" />
 
@@ -569,13 +588,13 @@
                     <div class="pd-stepper">
                         <button type="button" class="pd-step-btn" data-step="-1" aria-label="Decrease quantity">&#8722;</button>
                         <span class="pd-qty">
-                            <asp:TextBox ID="txtQty" runat="server" Text="1" MaxLength="2" CssClass="qty-input" aria-label="Quantity in kg" /><span class="pd-qty-unit">kg</span>
+                            <asp:TextBox ID="txtQty" runat="server" Text="1" MaxLength="2" CssClass="qty-input" aria-label="Quantity in kg" /><span class="pd-qty-unit"><%: CurrentProduct != null ? CurrentProduct.Unit : "kg" %></span>
                         </span>
                         <button type="button" class="pd-step-btn" data-step="1" aria-label="Increase quantity">+</button>
                     </div>
 
-                    <asp:Button ID="btnAddToCart" runat="server" Text="Add to Cart" CssClass="pd-btn pd-btn--cart" ValidationGroup="Product" />
-                    <asp:Button ID="btnBuyNow" runat="server" Text="Buy Now" CssClass="pd-btn pd-btn--buy" ValidationGroup="Product" />
+                    <asp:Button ID="btnAddToCart" runat="server" Text="Add to Cart" CssClass="pd-btn pd-btn--cart" ValidationGroup="Product" OnClick="btnAddToCart_Click" />
+                    <asp:Button ID="btnBuyNow" runat="server" Text="Buy Now" CssClass="pd-btn pd-btn--buy" ValidationGroup="Product" OnClick="btnBuyNow_Click" />
 
                     <asp:RequiredFieldValidator ID="rfvQty" runat="server"
                         ControlToValidate="txtQty"
@@ -688,7 +707,16 @@
             for (var k = 0; k < steps.length; k++) {
                 steps[k].addEventListener('click', function () {
                     var step = parseInt(this.getAttribute('data-step'), 10);
-                    qty.value = String((parseInt(qty.value, 10) || 0) + step);
+                    // rvQty's MaximumValue follows the product's real stock, so the cap
+                    // is read back off the validator instead of being hardcoded here.
+                    // ASP.NET assigns it as an expando property from a script block that
+                    // runs after this one, so the lookup has to happen on the click.
+                    var rv = document.getElementById('<%= rvQty.ClientID %>');
+                    var maxQty = (rv && parseInt(rv.maximumvalue, 10)) || 10;
+                    var next = (parseInt(qty.value, 10) || 0) + step;
+                    if (next < 1) { next = 1; }
+                    if (next > maxQty) { next = maxQty; }
+                    qty.value = String(next);
                 });
             }
 

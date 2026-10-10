@@ -1,6 +1,12 @@
-<%@ Page Title="Register" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="sabzify.Register" UnobtrusiveValidationMode="None" %>
+﻿<%@ Page Title="Register" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="sabzify.Register" UnobtrusiveValidationMode="None" %>
 
 <asp:Content ID="RegisterContent" ContentPlaceHolderID="MainContent" runat="server">
+
+    <style>
+        .site-header {
+            display: none !important;
+        }
+    </style>
 
     <div class="auth-page">
         <div class="auth-card auth-card--wide">
@@ -23,7 +29,7 @@
                         <svg class="auth-input-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z" />
                         </svg>
-                        <asp:TextBox ID="txtFullName" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="Enter your full name" />
+                        <asp:TextBox ID="txtFullName" MaxLength="100" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="Enter your full name" />
                     </div>
                     <asp:RequiredFieldValidator ID="rfvFullName" runat="server"
                         ControlToValidate="txtFullName"
@@ -34,7 +40,7 @@
                         ValidationGroup="Register" />
                     <asp:RegularExpressionValidator ID="revFullName" runat="server"
                         ControlToValidate="txtFullName"
-                        ValidationExpression="^(?=.{2,100}$)[A-Za-z]+(?:[ .'][A-Za-z]+)*$"
+                        ValidationExpression="^\s*(?=[A-Za-z][A-Za-z .'-]{0,98}[A-Za-z]\s*$)[A-Za-z]+(?:[ .'-][A-Za-z]+)*\s*$"
                         ErrorMessage="Name can contain only letters and spaces"
                         Display="Dynamic"
                         CssClass="field-error"
@@ -48,7 +54,7 @@
                         <svg class="auth-input-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z" />
                         </svg>
-                        <asp:TextBox ID="txtMobile" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="10-digit mobile number" />
+                        <asp:TextBox ID="txtMobile" MaxLength="10" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="10-digit mobile number" />
                     </div>
                     <asp:RequiredFieldValidator ID="rfvMobile" runat="server"
                         ControlToValidate="txtMobile"
@@ -76,7 +82,7 @@
                     <svg class="auth-input-icon" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-8 5-8-5V6l8 5 8-5v2.24z" />
                     </svg>
-                    <asp:TextBox ID="txtEmail" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="Enter your email" />
+                    <asp:TextBox ID="txtEmail" MaxLength="100" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="Enter your email" />
                 </div>
                 <asp:RequiredFieldValidator ID="rfvEmail" runat="server"
                     ControlToValidate="txtEmail"
@@ -104,7 +110,7 @@
                         <svg class="auth-input-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M18 8h-1V6a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zM9 6a3 3 0 0 1 6 0v2H9V6zm3 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
                         </svg>
-                        <asp:TextBox ID="txtPassword" runat="server" CssClass="auth-input" TextMode="Password" placeholder="Create a password" />
+                        <asp:TextBox ID="txtPassword" MaxLength="50" runat="server" CssClass="auth-input" TextMode="Password" placeholder="Create a password" />
                         <button type="button" class="auth-eye" data-toggle-password="<%= txtPassword.ClientID %>" aria-label="Show password">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M12 5c-5 0-9.3 3.1-11 7 1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
@@ -120,8 +126,8 @@
                         ValidationGroup="Register" />
                     <asp:RegularExpressionValidator ID="revPassword" runat="server"
                         ControlToValidate="txtPassword"
-                        ValidationExpression="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
-                        ErrorMessage="Min 8 characters with uppercase, lowercase and a number"
+                        ValidationExpression="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,50}$"
+                        ErrorMessage="8 to 50 characters with uppercase, lowercase and a number"
                         Display="Dynamic"
                         CssClass="field-error"
                         SetFocusOnError="true"
@@ -134,7 +140,7 @@
                         <svg class="auth-input-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M18 8h-1V6a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zM9 6a3 3 0 0 1 6 0v2H9V6zm3 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
                         </svg>
-                        <asp:TextBox ID="txtConfirmPassword" runat="server" CssClass="auth-input" TextMode="Password" placeholder="Re-enter your password" />
+                        <asp:TextBox ID="txtConfirmPassword" MaxLength="50" runat="server" CssClass="auth-input" TextMode="Password" placeholder="Re-enter your password" />
                         <button type="button" class="auth-eye" data-toggle-password="<%= txtConfirmPassword.ClientID %>" aria-label="Show password">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M12 5c-5 0-9.3 3.1-11 7 1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
@@ -181,7 +187,7 @@
                 <asp:RegularExpressionValidator ID="revAddress" runat="server"
                     ControlToValidate="txtAddress"
                     ValidationExpression="^[\s\S]{10,250}$"
-                    ErrorMessage="Enter a complete delivery address"
+                    ErrorMessage="Address must be 10 to 250 characters"
                     Display="Dynamic"
                     CssClass="field-error"
                     SetFocusOnError="true"
@@ -197,7 +203,7 @@
                         <svg class="auth-input-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M4 22V2h10v6h6v14H4zm2-2h6V4H6v16zm8 0h4V10h-4v10zM8 6h2v2H8V6zm0 4h2v2H8v-2zm0 4h2v2H8v-2z" />
                         </svg>
-                        <asp:TextBox ID="txtCity" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="Enter your city" />
+                        <asp:TextBox ID="txtCity" MaxLength="50" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="Enter your city" />
                     </div>
                     <asp:RequiredFieldValidator ID="rfvCity" runat="server"
                         ControlToValidate="txtCity"
@@ -208,7 +214,7 @@
                         ValidationGroup="Register" />
                     <asp:RegularExpressionValidator ID="revCity" runat="server"
                         ControlToValidate="txtCity"
-                        ValidationExpression="^(?=.{2,50}$)[A-Za-z]+(?:[ .-][A-Za-z]+)*$"
+                        ValidationExpression="^\s*(?=[A-Za-z][A-Za-z .-]{0,48}[A-Za-z]\s*$)[A-Za-z]+(?:[ .-][A-Za-z]+)*\s*$"
                         ErrorMessage="Enter a valid city name"
                         Display="Dynamic"
                         CssClass="field-error"
@@ -222,7 +228,7 @@
                         <svg class="auth-input-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
                         </svg>
-                        <asp:TextBox ID="txtState" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="Enter your state" />
+                        <asp:TextBox ID="txtState" MaxLength="50" runat="server" CssClass="auth-input" TextMode="SingleLine" placeholder="Enter your state" />
                     </div>
                     <asp:RequiredFieldValidator ID="rfvState" runat="server"
                         ControlToValidate="txtState"
@@ -233,7 +239,7 @@
                         ValidationGroup="Register" />
                     <asp:RegularExpressionValidator ID="revState" runat="server"
                         ControlToValidate="txtState"
-                        ValidationExpression="^(?=.{2,50}$)[A-Za-z]+(?:[ .-][A-Za-z]+)*$"
+                        ValidationExpression="^\s*(?=[A-Za-z][A-Za-z .-]{0,48}[A-Za-z]\s*$)[A-Za-z]+(?:[ .-][A-Za-z]+)*\s*$"
                         ErrorMessage="Enter a valid state name"
                         Display="Dynamic"
                         CssClass="field-error"
@@ -242,6 +248,8 @@
                 </div>
 
             </div>
+
+            <asp:Label ID="lblError" runat="server" CssClass="field-error" style="display:block; margin-bottom:12px; text-align:center; font-size:12.5px;" Visible="false" EnableViewState="false" />
 
             <asp:Button ID="btnRegister" runat="server"
                 CssClass="auth-btn"

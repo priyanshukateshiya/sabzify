@@ -469,7 +469,7 @@
 
                         <div class="co-field">
                             <label class="co-label" for="<%= txtFullName.ClientID %>">Full Name</label>
-                            <asp:TextBox ID="txtFullName" runat="server" CssClass="co-input" placeholder="vivek makvana" />
+                            <asp:TextBox ID="txtFullName" runat="server" CssClass="co-input" MaxLength="100" placeholder="vivek makvana" />
                             <asp:RequiredFieldValidator ID="rfvFullName" runat="server"
                                 ControlToValidate="txtFullName"
                                 Text="Full name is required"
@@ -491,7 +491,7 @@
 
                         <div class="co-field">
                             <label class="co-label" for="<%= txtPhone.ClientID %>">Phone Number</label>
-                            <asp:TextBox ID="txtPhone" runat="server" CssClass="co-input" placeholder="+91 98765 43210" />
+                            <asp:TextBox ID="txtPhone" runat="server" CssClass="co-input" MaxLength="16" placeholder="+91 98765 43210" />
                             <asp:RequiredFieldValidator ID="rfvPhone" runat="server"
                                 ControlToValidate="txtPhone"
                                 Text="Phone number is required"
@@ -502,7 +502,7 @@
                                 SetFocusOnError="true" />
                             <asp:RegularExpressionValidator ID="revPhone" runat="server"
                                 ControlToValidate="txtPhone"
-                                ValidationExpression="^(\+91[\s-]?)?[6-9]\d{9}$"
+                                ValidationExpression="^(\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}$"
                                 Text="Enter a valid 10-digit mobile number"
                                 ErrorMessage=""
                                 ValidationGroup="Checkout"
@@ -513,7 +513,7 @@
 
                         <div class="co-field co-field--full">
                             <label class="co-label" for="<%= txtAddress.ClientID %>">Flat, House no., Building, Company, Apartment</label>
-                            <asp:TextBox ID="txtAddress" runat="server" CssClass="co-input" placeholder="rajkot" />
+                            <asp:TextBox ID="txtAddress" runat="server" CssClass="co-input" MaxLength="200" placeholder="rajkot" />
                             <asp:RequiredFieldValidator ID="rfvAddress" runat="server"
                                 ControlToValidate="txtAddress"
                                 Text="Delivery address is required"
@@ -535,7 +535,7 @@
 
                         <div class="co-field">
                             <label class="co-label" for="<%= txtCity.ClientID %>">City</label>
-                            <asp:TextBox ID="txtCity" runat="server" CssClass="co-input co-input--filled" placeholder="Rajkot" />
+                            <asp:TextBox ID="txtCity" runat="server" CssClass="co-input co-input--filled" MaxLength="50" placeholder="Rajkot" />
                             <asp:RequiredFieldValidator ID="rfvCity" runat="server"
                                 ControlToValidate="txtCity"
                                 Text="City is required"
@@ -557,7 +557,7 @@
 
                         <div class="co-field">
                             <label class="co-label" for="<%= txtState.ClientID %>">State</label>
-                            <asp:TextBox ID="txtState" runat="server" CssClass="co-input co-input--filled" placeholder="Gujarat" />
+                            <asp:TextBox ID="txtState" runat="server" CssClass="co-input co-input--filled" MaxLength="50" placeholder="Gujarat" />
                             <asp:RequiredFieldValidator ID="rfvState" runat="server"
                                 ControlToValidate="txtState"
                                 Text="State is required"
@@ -579,7 +579,7 @@
 
                         <div class="co-field">
                             <label class="co-label" for="<%= txtPincode.ClientID %>">Pincode</label>
-                            <asp:TextBox ID="txtPincode" runat="server" CssClass="co-input" placeholder="360001" />
+                            <asp:TextBox ID="txtPincode" runat="server" CssClass="co-input" MaxLength="6" placeholder="360001" />
                             <asp:RequiredFieldValidator ID="rfvPincode" runat="server"
                                 ControlToValidate="txtPincode"
                                 Text="Pincode is required"
@@ -610,13 +610,17 @@
                     </h2>
 
                     <%-- A RadioButtonList keeps this one control, so a plain
-                         RequiredFieldValidator can guard it with no code behind. --%>
+                         RequiredFieldValidator can guard it with no code behind.
+                         No item is Selected by default: with one pre-selected,
+                         SelectedValue was never empty and rfvSlot could never
+                         fail, so a slot was booked without the customer picking
+                         one. --%>
                     <div class="slot-wrap">
                         <asp:RadioButtonList ID="rblSlot" runat="server"
                             CssClass="slot-list"
                             RepeatLayout="Flow"
                             RepeatDirection="Horizontal">
-                            <asp:ListItem Value="Morning" Selected="True" Text='&lt;svg class="slot-icon slot-icon--sun" viewBox="0 0 24 24" aria-hidden="true"&gt;&lt;path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-13.5a1 1 0 0 1 1 1V6a1 1 0 0 1-2 0V4.5a1 1 0 0 1 1-1zm0 15a1 1 0 0 1 1 1V21a1 1 0 0 1-2 0v-1.5a1 1 0 0 1 1-1zM3.5 12a1 1 0 0 1 1-1H6a1 1 0 0 1 0 2H4.5a1 1 0 0 1-1-1zm14.5 0a1 1 0 0 1 1-1h1.5a1 1 0 0 1 0 2H19a1 1 0 0 1-1-1zM5.6 5.6a1 1 0 0 1 1.4 0l1 1a1 1 0 0 1-1.4 1.4l-1-1a1 1 0 0 1 0-1.4zm10.4 10.4a1 1 0 0 1 1.4 0l1 1a1 1 0 0 1-1.4 1.4l-1-1a1 1 0 0 1 0-1.4zm2.4-10.4a1 1 0 0 1 0 1.4l-1 1A1 1 0 0 1 16 6.6l1-1a1 1 0 0 1 1.4 0zM8 16a1 1 0 0 1 0 1.4l-1 1A1 1 0 0 1 5.6 17l1-1a1 1 0 0 1 1.4 0z"/&gt;&lt;/svg&gt;&lt;span class="slot-name"&gt;Morning Slot&lt;/span&gt;&lt;span class="slot-time"&gt;8:00 AM - 11:00 AM&lt;/span&gt;' />
+                            <asp:ListItem Value="Morning" Text='&lt;svg class="slot-icon slot-icon--sun" viewBox="0 0 24 24" aria-hidden="true"&gt;&lt;path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-13.5a1 1 0 0 1 1 1V6a1 1 0 0 1-2 0V4.5a1 1 0 0 1 1-1zm0 15a1 1 0 0 1 1 1V21a1 1 0 0 1-2 0v-1.5a1 1 0 0 1 1-1zM3.5 12a1 1 0 0 1 1-1H6a1 1 0 0 1 0 2H4.5a1 1 0 0 1-1-1zm14.5 0a1 1 0 0 1 1-1h1.5a1 1 0 0 1 0 2H19a1 1 0 0 1-1-1zM5.6 5.6a1 1 0 0 1 1.4 0l1 1a1 1 0 0 1-1.4 1.4l-1-1a1 1 0 0 1 0-1.4zm10.4 10.4a1 1 0 0 1 1.4 0l1 1a1 1 0 0 1-1.4 1.4l-1-1a1 1 0 0 1 0-1.4zm2.4-10.4a1 1 0 0 1 0 1.4l-1 1A1 1 0 0 1 16 6.6l1-1a1 1 0 0 1 1.4 0zM8 16a1 1 0 0 1 0 1.4l-1 1A1 1 0 0 1 5.6 17l1-1a1 1 0 0 1 1.4 0z"/&gt;&lt;/svg&gt;&lt;span class="slot-name"&gt;Morning Slot&lt;/span&gt;&lt;span class="slot-time"&gt;8:00 AM - 11:00 AM&lt;/span&gt;' />
                             <asp:ListItem Value="Evening" Text='&lt;svg class="slot-icon slot-icon--moon" viewBox="0 0 24 24" aria-hidden="true"&gt;&lt;path d="M21 13.3A9 9 0 0 1 10.7 3 9 9 0 1 0 21 13.3z"/&gt;&lt;/svg&gt;&lt;span class="slot-name"&gt;Evening Slot&lt;/span&gt;&lt;span class="slot-time"&gt;4:00 PM - 7:00 PM&lt;/span&gt;' />
                         </asp:RadioButtonList>
                         <asp:RequiredFieldValidator ID="rfvSlot" runat="server"
@@ -700,7 +704,7 @@
                         Text="Place Order &#8594;"
                         CssClass="place-btn"
                         ValidationGroup="Checkout"
-                        PostBackUrl="~/OrderConfirmation.aspx" />
+                        OnClick="btnPlaceOrder_Click" />
 
                     <p class="sum-secure">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a5 5 0 0 0-5 5v3H5v13h14V9h-2V6a5 5 0 0 0-5-5zm0 2a3 3 0 0 1 3 3v3H9V6a3 3 0 0 1 3-3z" /></svg>

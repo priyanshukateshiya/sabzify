@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Home" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="sabzify.Home" UnobtrusiveValidationMode="None" %>
+<%@ Page Title="Home" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="sabzify.Home" UnobtrusiveValidationMode="None" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -9,7 +9,7 @@
         <div class="hero-content">
             <h1 class="hero-title">Fresh Vegetables,<br />Delivered to Your Door</h1>
             <p class="hero-text">Farm-fresh vegetables at affordable prices. Delivered straight to your home in Rajkot.</p>
-            <a class="btn btn-leaf hero-btn" href="#">Shop Now</a>
+            <a class="btn btn-leaf hero-btn" href="Vegetables.aspx">Shop Now</a>
         </div>
         </section>
     </div>
@@ -18,12 +18,12 @@
     <section class="shell section">
         <div class="section-head">
             <h2 class="section-title">Shop by Category</h2>
-            <a class="view-all" href="#">View All &#8594;</a>
+            <a class="view-all" href="Vegetables.aspx">View All &#8594;</a>
         </div>
 
         <div class="cat-grid">
 
-            <a class="cat-card" href="#">
+            <a class="cat-card" href="Vegetables.aspx">
                 <span class="cat-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M20 3C10 3 4 8 4 15c0 2.2.7 4.1 1.9 5.5L4 22.4 5.4 21l1.9-1.9C8.7 20.3 10.6 21 12.8 21 19.8 21 21 12 20 3zm-8.3 13.6c-.9 0-1.7-.2-2.4-.6 2.6-3.6 6-6.2 9.6-7.6-1.2 4.9-3.6 8.2-7.2 8.2z" />
@@ -32,7 +32,7 @@
                 <span class="cat-name">Vegetables</span>
             </a>
 
-            <a class="cat-card" href="#">
+            <a class="cat-card" href="Vegetables.aspx?cat=Leafy%20Greens">
                 <span class="cat-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 22c0-5 2-9 6-11-1 5-3 8-6 11zm0 0C9 19 7 16 6 11c4 2 6 6 6 11zM12 9C10.5 6 11 3 13 1c1 2.5.5 5.5-1 8z" />
@@ -41,7 +41,7 @@
                 <span class="cat-name">Leafy Greens</span>
             </a>
 
-            <a class="cat-card" href="#">
+            <a class="cat-card" href="Vegetables.aspx?cat=Root%20Vegetables">
                 <span class="cat-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M14.5 3.5 17 6l-1.8 1.8 1.4 1.4L18.4 7.4 21 10l-9.5 9.5a5 5 0 0 1-7-7L14.5 3.5z" />
@@ -50,7 +50,7 @@
                 <span class="cat-name">Root Veggies</span>
             </a>
 
-            <a class="cat-card" href="#">
+            <a class="cat-card" href="Vegetables.aspx?cat=Seasonal">
                 <span class="cat-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M7 2h10v2h3v4a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V18h4v3H7v-3h4v-3.1a5 5 0 0 1-2.7-2.9H8a4 4 0 0 1-4-4V4h3V2zm-1 4v2a2 2 0 0 0 2 2V6H6zm12 0h-2v4a2 2 0 0 0 2-2V6z" />
@@ -70,23 +70,23 @@
 
         <div class="prod-grid">
 
-            <article class="prod-card">
+            <article class="prod-card" onclick="openProduct(1)" style="cursor: pointer;">
                 <div class="prod-media">
-                    <a href="ProductDetails.aspx"><img class="product-img" src="Content/Images/tomato.png" alt="Fresh Tomato" /></a>
+                    <img class="product-img" src="Content/Images/tomato.png" alt="Fresh Tomato" />
                     <span class="prod-badge">20% OFF</span>
                 </div>
                 <div class="prod-body">
-                    <h3 class="prod-name"><a href="ProductDetails.aspx">Fresh Tomato</a></h3>
+                    <h3 class="prod-name">Fresh Tomato</h3>
                     <p class="prod-unit">1 kg</p>
                     <p class="prod-price">
                         <span class="price-now">&#8377;35</span>
                         <span class="price-old">&#8377;45</span>
                     </p>
-                    <button type="button" class="btn btn-leaf prod-btn">Add to Cart</button>
+                    <button type="button" class="btn btn-leaf prod-btn" onclick="handleAddToCart(event, 1)">Add to Cart</button>
                 </div>
             </article>
 
-            <article class="prod-card">
+            <article class="prod-card" onclick="openProduct(2)" style="cursor: pointer;">
                 <div class="prod-media">
                     <img class="product-img" src="Content/Images/carrot.png" alt="Fresh Carrot" />
                 </div>
@@ -96,15 +96,11 @@
                     <p class="prod-price">
                         <span class="price-now">&#8377;40</span>
                     </p>
-                    <div class="qty-stepper">
-                        <button type="button" class="qty-btn" aria-label="Decrease quantity">&#8722;</button>
-                        <span class="qty-value">1</span>
-                        <button type="button" class="qty-btn" aria-label="Increase quantity">+</button>
-                    </div>
+                    <button type="button" class="btn btn-leaf prod-btn" onclick="handleAddToCart(event, 2)">Add to Cart</button>
                 </div>
             </article>
 
-            <article class="prod-card">
+            <article class="prod-card" onclick="openProduct(5)" style="cursor: pointer;">
                 <div class="prod-media">
                     <img class="product-img" src="Content/Images/cabbage.png" alt="Cabbage" />
                 </div>
@@ -114,11 +110,11 @@
                     <p class="prod-price">
                         <span class="price-now">&#8377;55</span>
                     </p>
-                    <button type="button" class="btn btn-leaf prod-btn">Add to Cart</button>
+                    <button type="button" class="btn btn-leaf prod-btn" onclick="handleAddToCart(event, 5)">Add to Cart</button>
                 </div>
             </article>
 
-            <article class="prod-card">
+            <article class="prod-card" onclick="openProduct(6)" style="cursor: pointer;">
                 <div class="prod-media">
                     <img class="product-img" src="Content/Images/onion.png" alt="Red Onion" />
                 </div>
@@ -128,11 +124,11 @@
                     <p class="prod-price">
                         <span class="price-now">&#8377;30</span>
                     </p>
-                    <button type="button" class="btn btn-leaf prod-btn">Add to Cart</button>
+                    <button type="button" class="btn btn-leaf prod-btn" onclick="handleAddToCart(event, 6)">Add to Cart</button>
                 </div>
             </article>
 
-            <article class="prod-card">
+            <article class="prod-card" onclick="openProduct(7)" style="cursor: pointer;">
                 <div class="prod-media">
                     <img class="product-img" src="Content/Images/capsicum.png" alt="Green Capsicum" />
                     <span class="prod-badge">15% OFF</span>
@@ -144,7 +140,7 @@
                         <span class="price-now">&#8377;65</span>
                         <span class="price-old">&#8377;75</span>
                     </p>
-                    <button type="button" class="btn btn-leaf prod-btn">Add to Cart</button>
+                    <button type="button" class="btn btn-leaf prod-btn" onclick="handleAddToCart(event, 7)">Add to Cart</button>
                 </div>
             </article>
 
@@ -157,11 +153,30 @@
         <div class="deals-copy">
             <h2 class="deals-title">Fresh Deals Every Day</h2>
             <p class="deals-text">Get up to <span class="deals-em">30% OFF</span> on seasonal vegetables</p>
-            <a class="btn btn-white deals-btn" href="#">Shop Deals</a>
+            <a class="btn btn-white deals-btn" href="Vegetables.aspx">Shop Deals</a>
         </div>
         <div class="deals-media" aria-hidden="true"></div>
         </section>
     </div>
+
+    <script type="text/javascript">
+        var isLoggedIn = <%= sabzify.AuthHelper.IsLoggedIn(Session) ? "true" : "false" %>;
+        function openProduct(id) {
+            if (!isLoggedIn) {
+                window.location.href = 'Login.aspx?ReturnUrl=' + encodeURIComponent('~/ProductDetails.aspx?id=' + id);
+            } else {
+                window.location.href = 'ProductDetails.aspx?id=' + id;
+            }
+        }
+        function handleAddToCart(e, id) {
+            e.stopPropagation();
+            if (!isLoggedIn) {
+                window.location.href = 'Login.aspx?ReturnUrl=' + encodeURIComponent('~/Cart.aspx');
+            } else {
+                window.location.href = 'Cart.aspx';
+            }
+        }
+    </script>
 
     <%-- ================= Why Choose Sabzify ================= --%>
     <section class="shell section">

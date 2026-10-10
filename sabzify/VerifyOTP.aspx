@@ -5,6 +5,9 @@
     <%-- Page-scoped styles: served with the page HTML, so they never depend on a
          cached copy of /Content/Site.css. Every selector starts with .otp-page. --%>
     <style>
+        .site-header {
+            display: none !important;
+        }
         .otp-page .auth-page {
             display: flex;
             align-items: center;
@@ -255,7 +258,8 @@
             <asp:Button ID="btnVerify" runat="server"
                 CssClass="auth-btn"
                 Text="Verify &amp; Proceed"
-                ValidationGroup="Otp" />
+                ValidationGroup="Otp"
+                OnClick="btnVerify_Click" />
 
             <p class="auth-foot">Didn't receive the code?
                 <button type="button" class="otp-resend resend-btn" id="btnResendOtp" disabled="disabled">Resend OTP (00:30)</button>
@@ -312,23 +316,38 @@
             // Resend countdown: 00:30 -> 00:00, then becomes a clickable link.
             var resend = document.getElementById('btnResendOtp');
             var seconds = 30;
+            var timer = null;
 
             function render() {
                 var ss = seconds < 10 ? '0' + seconds : '' + seconds;
                 resend.textContent = 'Resend OTP (00:' + ss + ')';
             }
 
-            render();
-            var timer = setInterval(function () {
-                seconds--;
-                if (seconds <= 0) {
-                    clearInterval(timer);
-                    resend.textContent = 'Resend OTP';
-                    resend.disabled = false;
-                    return;
-                }
+            function startCountdown() {
+                seconds = 30;
+                resend.disabled = true;
                 render();
-            }, 1000);
+                timer = setInterval(function () {
+                    seconds--;
+                    if (seconds <= 0) {
+                        clearInterval(timer);
+                        timer = null;
+                        resend.textContent = 'Resend OTP';
+                        resend.disabled = false;
+                        return;
+                    }
+                    render();
+                }, 1000);
+            }
+
+            // Once the countdown has enabled the button it has to do something:
+            // restart the 30 second wait instead of staying inert.
+            resend.addEventListener('click', function () {
+                if (resend.disabled || timer) { return; }
+                startCountdown();
+            });
+
+            startCountdown();
         })();
     </script>
 
