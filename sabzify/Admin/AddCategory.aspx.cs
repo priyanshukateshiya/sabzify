@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +11,18 @@ namespace sabzify.Admin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            AuthHelper.RequireAdminAuth(this);
+        }
 
+        protected void btnSaveCategory_Click(object sender, EventArgs e)
+        {
+            if (!Page.IsValid)
+            {
+                return;
+            }
+
+            Response.Redirect("~/Admin/Categories.aspx", false);
+            Context.ApplicationInstance.CompleteRequest();
         }
     }
 }

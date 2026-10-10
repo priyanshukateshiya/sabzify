@@ -15,6 +15,15 @@ namespace sabzify.Admin
     {
 
         /// <summary>
+        /// phUploadTooLarge control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phUploadTooLarge;
+
+        /// <summary>
         /// fuPhoto control.
         /// </summary>
         /// <remarks>
@@ -293,14 +302,15 @@ namespace sabzify.Admin
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblSmsAlerts;
 
+
         /// <summary>
-        /// btnCancel control.
+        /// vsAdminProfile control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancel;
+        protected global::System.Web.UI.WebControls.ValidationSummary vsAdminProfile;
 
         /// <summary>
         /// btnSave control.

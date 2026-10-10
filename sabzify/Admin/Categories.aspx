@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Categories" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="Categories.aspx.cs" Inherits="sabzify.Admin.Categories" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Categories" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="Categories.aspx.cs" Inherits="sabzify.Admin.Categories" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="CategoriesTitle" ContentPlaceHolderID="TitleContent" runat="server">Categories</asp:Content>
 
@@ -396,7 +396,8 @@
                 var actions = row.querySelector('.actions');
 
                 if (btn.classList.contains('icon-edit')) {
-                    window.location.href = 'AddCategory.aspx';
+                    var catName = row ? row.querySelector('.cat-name').textContent.trim() : '';
+                    window.location.href = 'EditCategory.aspx' + (catName ? '?name=' + encodeURIComponent(catName) : '');
                 } else if (btn.classList.contains('icon-delete')) {
                     actions.hidden = true;
                     var box = row.querySelector('.confirm');

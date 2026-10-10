@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,7 +13,14 @@ namespace sabzify.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            AuthHelper.RequireAdminAuth(this);
 
+            // Global.asax redirects here with this flag when an upload was too big
+            // for ASP.NET to parse at all, so the post never reached this page.
+            if (!IsPostBack && Request.QueryString["uploadtoolarge"] == "1")
+            {
+                phUploadTooLarge.Visible = true;
+            }
         }
 
         // No photo selected is valid: the admin keeps the current photo.
@@ -32,6 +39,17 @@ namespace sabzify.Admin
         protected void cvConfirmRequired_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = txtNewPassword.Text.Length == 0 || txtConfirmPassword.Text.Length > 0;
+        }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            if (!Page.IsValid)
+            {
+                return;
+            }
+
+            Response.Redirect("~/Admin/Dashboard.aspx", false);
+            Context.ApplicationInstance.CompleteRequest();
         }
     }
 }

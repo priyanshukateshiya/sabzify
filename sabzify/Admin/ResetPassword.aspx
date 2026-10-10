@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Set New Admin Password" Language="C#" AutoEventWireup="true" CodeBehind="ResetPassword.aspx.cs" Inherits="sabzify.Admin.ResetPassword" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Set New Admin Password" Language="C#" AutoEventWireup="true" CodeBehind="ResetPassword.aspx.cs" Inherits="sabzify.Admin.ResetPassword" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -411,9 +411,15 @@
                         DisplayMode="SingleParagraph" HeaderText="" ShowMessageBox="false"
                         EnableClientScript="false" CssClass="summary-error" />
 
+                    <%-- Shown when the server cannot complete the reset - the verified
+                         reset request expired while this form was open. Reuses the same
+                         .summary-error style as the validators. --%>
+                    <asp:Label ID="lblResetError" runat="server" CssClass="summary-error"
+                        EnableViewState="false" Visible="false" role="alert" />
+
                     <asp:Button ID="btnResetPassword" runat="server" CssClass="ar-btn"
                         Text="Reset Password &#8594;" ValidationGroup="AdminReset"
-                        PostBackUrl="~/Admin/Login.aspx" />
+                        OnClick="btnResetPassword_Click" />
 
                     <p class="ar-foot"><a href="Login.aspx">&#8592; Back to Admin Login</a></p>
 

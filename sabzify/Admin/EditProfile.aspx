@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Edit Profile" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="EditProfile.aspx.cs" Inherits="sabzify.Admin.EditProfile" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Edit Profile" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="EditProfile.aspx.cs" Inherits="sabzify.Admin.EditProfile" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="EditProfileTitle" ContentPlaceHolderID="TitleContent" runat="server">Edit Profile</asp:Content>
 
@@ -21,6 +21,42 @@
         .profile-page .ep-form {
             max-width: 640px;
             margin: 0 auto;
+        }
+
+        /* The ValidationSummary carries CssClass="summary-error" but this page
+           never defined the class, so its message rendered as plain dark text,
+           running straight into the header text. Matches AddUser/AddCategory. */
+        .profile-page .summary-error {
+            margin: -4px 0 14px;
+            font-size: 10.5px;
+            line-height: 1.4;
+            color: #C0392B;
+        }
+
+        .profile-page .summary-error:empty {
+            display: none;
+        }
+
+        .profile-page .ep-alert {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 10px 12px;
+            border: 1px solid #F2C9C3;
+            border-radius: 9px;
+            background: #FDF3F1;
+            font-size: 11.5px;
+            line-height: 1.4;
+            color: #C0392B;
+        }
+
+        .profile-page .ep-alert svg {
+            flex: none;
+            width: 15px;
+            height: 15px;
+            margin-top: 1px;
+            fill: #C0392B;
         }
 
         /* Section cards --------------------------------------------------------- */
@@ -186,6 +222,11 @@
         .profile-page .photo-msgs {
             position: relative;
             margin-top: 8px;
+            /* Room for two stacked error lines. Now that the size rule also runs
+               in the browser, a file can fail BOTH rules at once (e.g. a 5 MB
+               .bmp); without this the second line escaped the absolutely
+               positioned overlay and sat on top of the Full Name field. */
+            min-height: 2.7em;
         }
 
         .profile-page .photo-hint {
@@ -404,6 +445,18 @@
             background: #F1F7F2;
         }
 
+        /* Cancel is an <a>, which - unlike a button - gets neither
+           box-sizing: border-box nor centred text from the UA stylesheet.
+           Without these it renders 32px tall (30 + 2px border) next to the
+           30px Save button, with the label left-aligned. */
+        .profile-page a.btn-cancel {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
         .profile-page .btn-save {
             border: 0;
             background: #1B7A3A;
@@ -451,6 +504,20 @@
 
         <div class="ep-form">
 
+            <%-- Shown only after Global.asax bounced an upload that was too big for
+                 ASP.NET to even parse. That request dies before Page_Load, so the
+                 page cannot report it itself - the handler redirects back here with
+                 a flag instead. With JavaScript on, the client-side size check stops
+                 the upload first and this never appears. --%>
+            <asp:PlaceHolder ID="phUploadTooLarge" runat="server" Visible="false">
+                <div class="ep-alert" role="alert">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2 1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z" />
+                    </svg>
+                    That photo was too large to upload. Please choose an image of 2 MB or less.
+                </div>
+            </asp:PlaceHolder>
+
             <%-- Personal Details --%>
             <div class="ep-card">
                 <div class="ep-card-head">
@@ -487,12 +554,15 @@
                                      which does not understand the .NET (?i) flag. --%>
                                 <asp:RegularExpressionValidator ID="revPhotoType" runat="server" ControlToValidate="fuPhoto"
                                     ValidationExpression="^$|.+\.([Jj][Pp][Gg]|[Jj][Pp][Ee][Gg]|[Pp][Nn][Gg]|[Gg][Ii][Ff])$"
-                                    ErrorMessage="Use a JPG, PNG or GIF file" Display="Dynamic"
+                                    Text="Use a JPG, PNG or GIF file" Display="Dynamic"
                                     CssClass="field-error" ValidationGroup="AdminProfile" />
-                                <%-- Server-side only (no ClientValidationFunction). --%>
+                                <%-- Checked on both sides. The client function measures the file with
+                                     the File API so an oversized photo is never uploaded at all; the
+                                     server handler stays the authority for anyone with JS disabled. --%>
                                 <asp:CustomValidator ID="cvPhotoSize" runat="server" ControlToValidate="fuPhoto"
                                     ValidateEmptyText="true" OnServerValidate="cvPhotoSize_ServerValidate"
-                                    ErrorMessage="Photo must be 2 MB or smaller" Display="Dynamic"
+                                    ClientValidationFunction="sabzifyValidatePhotoSize" data-max-bytes="2097152"
+                                    Text="Photo must be 2 MB or smaller" Display="Dynamic"
                                     CssClass="field-error" ValidationGroup="AdminProfile" />
                             </div>
                         </div>
@@ -504,11 +574,11 @@
                         <asp:Label ID="lblFullName" runat="server" AssociatedControlID="txtFullName" Text="Full Name" />
                         <asp:TextBox ID="txtFullName" runat="server" Text="Priyanshu kateshiya" autocomplete="name" />
                         <asp:RequiredFieldValidator ID="rfvFullName" runat="server" ControlToValidate="txtFullName"
-                            ErrorMessage="Full name is required" ValidationGroup="AdminProfile" Display="Dynamic"
+                            Text="Full name is required" ValidationGroup="AdminProfile" Display="Dynamic"
                             CssClass="field-error" SetFocusOnError="true" />
                         <asp:RegularExpressionValidator ID="revFullName" runat="server" ControlToValidate="txtFullName"
                             ValidationExpression="^(?=.{2,100}$)[A-Za-z]+(?:[ .'][A-Za-z]+)*$"
-                            ErrorMessage="Only letters and spaces" ValidationGroup="AdminProfile" Display="Dynamic"
+                            Text="Only letters and spaces" ValidationGroup="AdminProfile" Display="Dynamic"
                             CssClass="field-error" SetFocusOnError="true" />
                     </div>
 
@@ -516,11 +586,11 @@
                         <asp:Label ID="lblEmail" runat="server" AssociatedControlID="txtEmail" Text="Email Address" />
                         <asp:TextBox ID="txtEmail" runat="server" Text="admin@sabzify.com" autocomplete="email" />
                         <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail"
-                            ErrorMessage="Email address is required" ValidationGroup="AdminProfile" Display="Dynamic"
+                            Text="Email address is required" ValidationGroup="AdminProfile" Display="Dynamic"
                             CssClass="field-error" SetFocusOnError="true" />
                         <asp:RegularExpressionValidator ID="revEmail" runat="server" ControlToValidate="txtEmail"
                             ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$"
-                            ErrorMessage="Enter a valid email" ValidationGroup="AdminProfile" Display="Dynamic"
+                            Text="Enter a valid email" ValidationGroup="AdminProfile" Display="Dynamic"
                             CssClass="field-error" SetFocusOnError="true" />
                     </div>
                 </div>
@@ -529,11 +599,11 @@
                     <asp:Label ID="lblMobile" runat="server" AssociatedControlID="txtMobile" Text="Mobile Number" />
                     <asp:TextBox ID="txtMobile" runat="server" Text="+91 8401368370" autocomplete="tel" />
                     <asp:RequiredFieldValidator ID="rfvMobile" runat="server" ControlToValidate="txtMobile"
-                        ErrorMessage="Mobile number is required" ValidationGroup="AdminProfile" Display="Dynamic"
+                        Text="Mobile number is required" ValidationGroup="AdminProfile" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                     <asp:RegularExpressionValidator ID="revMobile" runat="server" ControlToValidate="txtMobile"
                         ValidationExpression="^(\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}$"
-                        ErrorMessage="Enter a valid 10-digit mobile number" ValidationGroup="AdminProfile" Display="Dynamic"
+                        Text="Enter a valid 10-digit mobile number" ValidationGroup="AdminProfile" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                 </div>
             </div>
@@ -555,7 +625,8 @@
                     <asp:TextBox ID="txtOldPassword" runat="server" TextMode="Password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password" />
                     <asp:CustomValidator ID="cvOldPassword" runat="server" ControlToValidate="txtOldPassword"
                         ValidateEmptyText="true" OnServerValidate="cvOldPassword_ServerValidate"
-                        ErrorMessage="Enter your current password to change it" ValidationGroup="AdminProfile" Display="Dynamic"
+                        ClientValidationFunction="sabzifyValidateOldPasswordRequired"
+                        Text="Enter your current password to change it" ValidationGroup="AdminProfile" Display="Dynamic"
                         CssClass="field-error" />
                 </div>
 
@@ -564,7 +635,7 @@
                     <asp:TextBox ID="txtNewPassword" runat="server" TextMode="Password" placeholder="Enter new password" autocomplete="new-password" />
                     <asp:RegularExpressionValidator ID="revNewPassword" runat="server" ControlToValidate="txtNewPassword"
                         ValidationExpression="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
-                        ErrorMessage="Min 8 characters with uppercase, lowercase and a number" ValidationGroup="AdminProfile" Display="Dynamic"
+                        Text="Min 8 characters with uppercase, lowercase and a number" ValidationGroup="AdminProfile" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                 </div>
 
@@ -573,11 +644,12 @@
                     <asp:TextBox ID="txtConfirmPassword" runat="server" TextMode="Password" placeholder="Confirm new password" autocomplete="new-password" />
                     <asp:CustomValidator ID="cvConfirmRequired" runat="server" ControlToValidate="txtConfirmPassword"
                         ValidateEmptyText="true" OnServerValidate="cvConfirmRequired_ServerValidate"
-                        ErrorMessage="Please confirm the new password" ValidationGroup="AdminProfile" Display="Dynamic"
+                        ClientValidationFunction="sabzifyValidateConfirmRequired"
+                        Text="Please confirm the new password" ValidationGroup="AdminProfile" Display="Dynamic"
                         CssClass="field-error" />
                     <asp:CompareValidator ID="cmpConfirmPassword" runat="server" ControlToValidate="txtConfirmPassword"
                         ControlToCompare="txtNewPassword" Operator="Equal" Type="String"
-                        ErrorMessage="Passwords do not match" ValidationGroup="AdminProfile" Display="Dynamic"
+                        Text="Passwords do not match" ValidationGroup="AdminProfile" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                 </div>
             </div>
@@ -618,19 +690,78 @@
                 </div>
             </div>
 
+            <asp:ValidationSummary ID="vsAdminProfile" runat="server" ValidationGroup="AdminProfile"
+                DisplayMode="SingleParagraph" HeaderText="Please complete the highlighted fields"
+                ShowMessageBox="false" CssClass="summary-error" />
+
             <div class="ep-actions">
-                <%-- UseSubmitBehavior="false" renders type="button", so pressing Enter
-                     in a field submits Save Changes, not Cancel. --%>
-                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn-cancel"
-                    CausesValidation="false" UseSubmitBehavior="false"
-                    PostBackUrl="~/Admin/Dashboard.aspx" />
+                <%-- A plain link, not an <asp:Button PostBackUrl>. Cancel only needs to
+                     navigate, and a cross-page post sent the whole multipart body -
+                     including a just-picked photo - only for FriendlyUrls to turn it
+                     into a 301 + GET and throw it away. A link also keeps Enter in a
+                     field on Save Changes, which UseSubmitBehavior="false" used to do. --%>
+                <a href="Dashboard.aspx" class="btn-cancel">Cancel</a>
                 <asp:Button ID="btnSave" runat="server" Text="Save Changes" CssClass="btn-save"
-                    ValidationGroup="AdminProfile" />
+                    ValidationGroup="AdminProfile" OnClick="btnSave_Click" />
             </div>
 
         </div>
 
     </div>
+
+    <%-- Client-side twin of cvPhotoSize_ServerValidate.
+         This MUST be a global function and MUST live in its own script block:
+         WebUIValidation.js resolves ClientValidationFunction by name in global
+         scope, so a function declared inside the IIFE below would be invisible
+         to it, and the resulting error would NOT cancel the post - the
+         oversized body would be uploaded anyway. --%>
+    <script>
+        window.sabzifyValidatePhotoSize = function (source, args) {
+            // Fail OPEN: anything we cannot measure is left to the server validator.
+            args.IsValid = true;
+            try {
+                var max = parseInt(source.getAttribute('data-max-bytes'), 10);
+                if (!(max > 0)) { max = 2 * 1024 * 1024; }
+
+                // args.Value is only "C:\\fakepath\\photo.jpg" - it carries no size,
+                // so the real <input type="file"> has to be read instead. ASP.NET
+                // hangs controltovalidate on the validator span as a JS expando.
+                var id = source.controltovalidate;
+                if (typeof id !== 'string' || !id) { return; }
+
+                var input = document.getElementById(id);
+                // No element, or no File API (very old browsers): stay valid.
+                if (!input || !input.files) { return; }
+
+                // ValidateEmptyText="true" means we are called even with no file
+                // chosen. Keeping the current photo is legal, so that is valid.
+                if (input.files.length === 0) { return; }
+
+                for (var i = 0; i < input.files.length; i++) {
+                    var size = input.files[i].size;
+                    if (typeof size !== 'number') { return; }   // unmeasurable: fail open
+                    if (size > max) { args.IsValid = false; return; }
+                }
+            } catch (e) {
+                args.IsValid = true;
+            }
+        };
+
+        // Client-side twins of cvOldPassword_ServerValidate and
+        // cvConfirmRequired_ServerValidate. Without them both rules fired only after
+        // a round trip, which had already cleared all three password boxes.
+        // Fail OPEN when the New Password box cannot be found, so the behaviour
+        // degrades to the server-only check instead of blocking a legitimate save.
+        window.sabzifyValidateOldPasswordRequired = function (source, args) {
+            var np = document.getElementById('<%= txtNewPassword.ClientID %>');
+            args.IsValid = !np || np.value.length === 0 || args.Value.length > 0;
+        };
+
+        window.sabzifyValidateConfirmRequired = function (source, args) {
+            var np = document.getElementById('<%= txtNewPassword.ClientID %>');
+            args.IsValid = !np || np.value.length === 0 || args.Value.length > 0;
+        };
+    </script>
 
     <%-- UI only: photo preview. It never blocks or rejects a file; the type and
          size rules belong to the validators above. --%>
@@ -641,6 +772,23 @@
             var preview = document.getElementById('imgPreview');
             var uploadBtn = document.getElementById('btnUploadPhoto');
             var removeBtn = document.getElementById('btnRemovePhoto');
+
+            // A validator's client-side object IS its rendered <span>.
+            var photoValidators = [
+                document.getElementById('<%= cvPhotoSize.ClientID %>'),
+                document.getElementById('<%= revPhotoType.ClientID %>')
+            ];
+
+            // Setting input.value = '' fires no change event, so the photo
+            // validators have to be re-run by hand after Remove - otherwise a
+            // "too large" message stays on screen with no file selected.
+            function revalidatePhoto() {
+                if (typeof ValidatorValidate !== 'function') { return; }
+                for (var i = 0; i < photoValidators.length; i++) {
+                    if (photoValidators[i]) { ValidatorValidate(photoValidators[i], null, null); }
+                }
+                if (typeof ValidatorUpdateIsValid === 'function') { ValidatorUpdateIsValid(); }
+            }
 
             function showInitials() {
                 avatar.classList.remove('has-photo');
@@ -674,6 +822,7 @@
                 fileInput.value = '';
                 showInitials();
                 removeBtn.classList.remove('is-shown');
+                revalidatePhoto();
                 uploadBtn.focus();
             });
         })();

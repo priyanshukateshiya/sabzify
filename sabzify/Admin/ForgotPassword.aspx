@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Admin Password Reset" Language="C#" AutoEventWireup="true" CodeBehind="ForgotPassword.aspx.cs" Inherits="sabzify.Admin.ForgotPassword" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Admin Password Reset" Language="C#" AutoEventWireup="true" CodeBehind="ForgotPassword.aspx.cs" Inherits="sabzify.Admin.ForgotPassword" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -334,7 +334,7 @@
 
                     <asp:Button ID="btnSendReset" runat="server" CssClass="af-btn"
                         Text="Send Reset Link &#8594;" ValidationGroup="AdminForgot"
-                        PostBackUrl="~/Admin/VerifyCode.aspx" />
+                        OnClick="btnSendReset_Click" />
 
                     <p class="af-foot"><a href="Login.aspx">&#8592; Back to Admin Login</a></p>
 

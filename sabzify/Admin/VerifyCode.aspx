@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Verify Admin Code" Language="C#" AutoEventWireup="true" CodeBehind="VerifyCode.aspx.cs" Inherits="sabzify.Admin.VerifyCode" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Verify Admin Code" Language="C#" AutoEventWireup="true" CodeBehind="VerifyCode.aspx.cs" Inherits="sabzify.Admin.VerifyCode" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -386,9 +386,14 @@
                         DisplayMode="SingleParagraph" HeaderText="Enter the complete 6-digit code"
                         ShowMessageBox="false" CssClass="summary-error" />
 
+                    <%-- Shown when the six digits do not match the code this session was
+                         issued. Reuses the same .summary-error style as the validators. --%>
+                    <asp:Label ID="lblCodeError" runat="server" CssClass="summary-error"
+                        EnableViewState="false" Visible="false" role="alert" />
+
                     <asp:Button ID="btnVerifyCode" runat="server" CssClass="av-btn"
                         Text="Verify Code &#8594;" ValidationGroup="AdminVerify"
-                        PostBackUrl="~/Admin/ResetPassword.aspx" />
+                        OnClick="btnVerifyCode_Click" />
 
                     <p class="av-resend">
                         Didn't receive the code?

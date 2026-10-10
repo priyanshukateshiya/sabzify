@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Products" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="Products.aspx.cs" Inherits="sabzify.Admin.Products" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Products" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="Products.aspx.cs" Inherits="sabzify.Admin.Products" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="ProductsTitle" ContentPlaceHolderID="TitleContent" runat="server">Products</asp:Content>
 
@@ -245,6 +245,27 @@
             color: #C0392B;
         }
 
+        .prod-page .btn-edit {
+            display: inline-flex;
+            align-items: center;
+            height: 28px;
+            padding: 0 12px;
+            border-radius: 6px;
+            border: 1px solid #C9D3C4;
+            background: #EAF3EA;
+            font-size: 11px;
+            font-weight: 600;
+            color: #1B7A3A;
+            text-decoration: none;
+            transition: all .15s ease;
+        }
+
+        .prod-page .btn-edit:hover {
+            background: #1B7A3A;
+            border-color: #1B7A3A;
+            color: #fff;
+        }
+
         @media screen and (max-width: 900px) {
             .prod-page .prod-header,
             .prod-page .prod-toolbar {
@@ -310,7 +331,7 @@
                     Stock Status
                 </button>
             </div>
-            <span class="prod-count">Showing 1&#8211;10 of 156 Products</span>
+            <span class="prod-count"><asp:Literal ID="litCount" runat="server" /></span>
         </div>
 
         <div class="prod-card">
@@ -318,67 +339,47 @@
                 <table class="prod-table">
                     <thead>
                         <tr>
-                            <th scope="col" class="col-check"><input type="checkbox" id="chkAllProducts" aria-label="Select all products" /></th>
                             <th scope="col">Product Name</th>
                             <th scope="col">Category</th>
                             <th scope="col" class="col-center">Price (&#8377;)</th>
                             <th scope="col" class="col-center">Unit</th>
                             <th scope="col" class="col-center">Stock Qty</th>
                             <th scope="col" class="col-center">Status</th>
+                            <th scope="col" class="col-center">Action</th>
                         </tr>
                     </thead>
                     <tbody id="prodRows">
-                        <tr>
-                            <td class="col-check"><input type="checkbox" class="row-check" aria-label="Select Fresh Tomato" /></td>
-                            <td><a class="prod-name" href="EditProduct.aspx">Fresh Tomato</a><span class="prod-edit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg></span></td>
-                            <td class="prod-muted">Vegetables</td>
-                            <td class="col-center prod-price">&#8377;35</td>
-                            <td class="col-center prod-muted">kg</td>
-                            <td class="col-center prod-stock">50</td>
-                            <td class="col-center"><span class="pill pill-active">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td class="col-check"><input type="checkbox" class="row-check" aria-label="Select Fresh Spinach" /></td>
-                            <td><a class="prod-name" href="EditProduct.aspx">Fresh Spinach</a><span class="prod-edit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg></span></td>
-                            <td class="prod-muted">Leafy Greens</td>
-                            <td class="col-center prod-price">&#8377;25</td>
-                            <td class="col-center prod-muted">bunch</td>
-                            <td class="col-center prod-stock is-zero">0</td>
-                            <td class="col-center"><span class="pill pill-out">Out of Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td class="col-check"><input type="checkbox" class="row-check" aria-label="Select Organic Carrots" /></td>
-                            <td><a class="prod-name" href="EditProduct.aspx">Organic Carrots</a><span class="prod-edit-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg></span></td>
-                            <td class="prod-muted">Root Vegetables</td>
-                            <td class="col-center prod-price">&#8377;45</td>
-                            <td class="col-center prod-muted">kg</td>
-                            <td class="col-center prod-stock">120</td>
-                            <td class="col-center"><span class="pill pill-active">Active</span></td>
-                        </tr>
+                        <asp:Repeater ID="rptProducts" runat="server">
+                            <ItemTemplate>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <img src='<%# Server.HtmlEncode(ResolveUrl("~/" + Convert.ToString(Eval("ImageUrl")))) %>' alt='<%# Server.HtmlEncode(Convert.ToString(Eval("Name"))) %>' style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid #E5E7EB;" />
+                                            <span class="prod-name"><%# Server.HtmlEncode(Convert.ToString(Eval("Name"))) %></span>
+                                        </div>
+                                    </td>
+                                    <td class="prod-muted"><%# Eval("Category") %></td>
+                                    <td class="col-center prod-price">&#8377;<%# Eval("Price") %></td>
+                                    <td class="col-center prod-muted"><%# FormatUnit(Eval("Unit")) %></td>
+                                    <td class='<%# Convert.ToInt32(Eval("StockQuantity")) == 0 ? "col-center prod-stock is-zero" : "col-center prod-stock" %>'><%# Eval("StockQuantity") %></td>
+                                    <td class="col-center">
+                                        <span class='<%# string.Equals(Eval("Status")?.ToString(), "Active", StringComparison.OrdinalIgnoreCase) ? "pill pill-active" : "pill pill-out" %>'>
+                                            <%# Eval("Status") %>
+                                        </span>
+                                    </td>
+                                    <td class="col-center">
+                                        <a class="btn-edit" href='EditProduct.aspx?id=<%# Eval("Id") %>'>
+                                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -1px; margin-right: 4px;"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
+                                            Edit Product
+                                        </a>
+                                    </td>
+                                </tr>
+                            </ItemTemplate>
+                        </asp:Repeater>
                     </tbody>
                 </table>
             </div>
         </div>
 
     </div>
-
-    <%-- UI only (no validation, no postback): select-all and row checkboxes. --%>
-    <script>
-        (function () {
-            var all = document.getElementById('chkAllProducts');
-            var rows = document.querySelectorAll('.prod-page .row-check');
-
-            all.addEventListener('change', function () {
-                Array.prototype.forEach.call(rows, function (box) {
-                    box.checked = all.checked;
-                });
-            });
-
-            Array.prototype.forEach.call(rows, function (box) {
-                box.addEventListener('change', function () {
-                    all.checked = Array.prototype.every.call(rows, function (b) { return b.checked; });
-                });
-            });
-        })();
-    </script>
 </asp:Content>
