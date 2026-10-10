@@ -216,7 +216,7 @@
             background: #E8F0F5;
         }
 
-        .cart-page .qty-pill:has(.qty-error:not([style*="display:none"]):not([style*="display: none"])) {
+        .cart-page .qty-pill.is-invalid {
             border-color: #C0392B;
         }
 
@@ -689,12 +689,37 @@
 
             function rupees(n) { return (n < 0 ? '-' : '') + RUPEE + Math.abs(n); }
 
+            function isVisible(node) {
+                if (!node) { return false; }
+                if (node.style && node.style.display === 'none') { return false; }
+                if (node.offsetParent === null && node !== document.body) { return false; }
+                return true;
+            }
+
+            function syncValidationState() {
+                if (!list) { return; }
+                var pills = list.querySelectorAll('.qty-pill');
+                for (var i = 0; i < pills.length; i++) {
+                    var pill = pills[i];
+                    var errorNodes = pill.querySelectorAll('.qty-error');
+                    var hasError = false;
+                    for (var j = 0; j < errorNodes.length; j++) {
+                        if (isVisible(errorNodes[j])) {
+                            hasError = true;
+                            break;
+                        }
+                    }
+                    pill.classList.toggle('is-invalid', hasError);
+                }
+            }
+
             function qtyOf(card) {
                 var box = card.querySelector('.qty-input');
                 return box ? (parseInt(box.value, 10) || 0) : 0;
             }
 
             function recalc() {
+                if (!list) { return; }
                 var cards = list.querySelectorAll('.cart-item');
                 var subtotal = 0, count = 0;
 
@@ -702,48 +727,70 @@
                     var card = cards[i];
                     if (card.classList.contains('is-out')) { continue; }
                     var line = parseInt(card.getAttribute('data-price'), 10) * qtyOf(card);
-                    card.querySelector('.item-sub').textContent = rupees(line);
+                    var lineBox = card.querySelector('.item-sub');
+                    if (lineBox) { lineBox.textContent = rupees(line); }
                     subtotal += line;
                     count++;
                 }
 
                 var delivery = count ? DELIVERY : 0;
                 var discount = count ? DISCOUNT : 0;
-                document.getElementById('sumItemsLabel').textContent = 'Subtotal (' + count + (count === 1 ? ' item)' : ' items)');
-                document.getElementById('sumSubtotal').textContent = rupees(subtotal);
-                document.getElementById('sumDelivery').textContent = rupees(delivery);
-                document.getElementById('sumDiscount').textContent = rupees(-discount);
-                document.getElementById('sumTotal').textContent = rupees(subtotal + delivery - discount);
+                var subtotalLabel = document.getElementById('sumItemsLabel');
+                var subtotalBox = document.getElementById('sumSubtotal');
+                var deliveryBox = document.getElementById('sumDelivery');
+                var discountBox = document.getElementById('sumDiscount');
+                var totalBox = document.getElementById('sumTotal');
 
-                if (!cards.length) { page.classList.add('is-empty'); }
+                if (subtotalLabel) { subtotalLabel.textContent = 'Subtotal (' + count + (count === 1 ? ' item)' : ' items)'); }
+                if (subtotalBox) { subtotalBox.textContent = rupees(subtotal); }
+                if (deliveryBox) { deliveryBox.textContent = rupees(delivery); }
+                if (discountBox) { discountBox.textContent = rupees(-discount); }
+                if (totalBox) { totalBox.textContent = rupees(subtotal + delivery - discount); }
+
+                if (page) {
+                    page.classList.toggle('is-empty', !count);
+                }
+
+                syncValidationState();
             }
 
-            list.addEventListener('click', function (e) {
-                var step = e.target.closest('.qty-btn');
-                if (step) {
-                    var box = step.parentNode.querySelector('.qty-input');
-                    box.value = String((parseInt(box.value, 10) || 0) + parseInt(step.getAttribute('data-step'), 10));
-                    recalc();
-                    return;
-                }
-
-                var remove = e.target.closest('.item-remove');
-                if (remove) {
-                    var card = remove.closest('.cart-item');
-                    // A removed card's validators must stop taking part in the
-                    // Cart group, otherwise checkout would look for a missing box.
-                    var vals = card.querySelectorAll('.qty-error');
-                    for (var i = 0; i < vals.length; i++) {
-                        if (typeof ValidatorEnable === 'function') { ValidatorEnable(vals[i], false); }
+            if (list) {
+                list.addEventListener('click', function (e) {
+                    var target = e.target || e.srcElement;
+                    var step = target && target.closest ? target.closest('.qty-btn') : null;
+                    if (step) {
+                        var box = step.parentNode.querySelector('.qty-input');
+                        if (box) {
+                            var next = (parseInt(box.value, 10) || 0) + parseInt(step.getAttribute('data-step'), 10);
+                            if (next < 1) { next = 1; }
+                            if (next > 10) { next = 10; }
+                            box.value = String(next);
+                        }
+                        recalc();
+                        return;
                     }
-                    card.parentNode.removeChild(card);
-                    recalc();
-                }
-            });
 
-            list.addEventListener('input', function (e) {
-                if (e.target.classList.contains('qty-input')) { recalc(); }
-            });
+                    var remove = target && target.closest ? target.closest('.item-remove') : null;
+                    if (remove) {
+                        var card = remove.closest('.cart-item');
+                        if (card) {
+                            var vals = card.querySelectorAll('.qty-error');
+                            for (var i = 0; i < vals.length; i++) {
+                                if (typeof ValidatorEnable === 'function') { ValidatorEnable(vals[i], false); }
+                            }
+                            if (card.parentNode) {
+                                card.parentNode.removeChild(card);
+                            }
+                            recalc();
+                        }
+                    }
+                });
+
+                list.addEventListener('input', function (e) {
+                    var target = e.target || e.srcElement;
+                    if (target && target.className && target.className.indexOf('qty-input') !== -1) { recalc(); }
+                });
+            }
 
             // Derive the subtotals and the summary from the quantity boxes right
             // away, so the markup and the totals can never drift apart.
