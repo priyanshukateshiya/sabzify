@@ -468,7 +468,7 @@
             <div class="ep-bar-row">
                 <div>
                     <h1 class="ep-title">Edit Product</h1>
-                    <p class="ep-sub">Update details for 'Fresh Tomato' in the Rajkot inventory.</p>
+                    <p class="ep-sub">Update details for '<asp:Literal ID="litProductName" runat="server" />' in the Rajkot inventory.</p>
                 </div>
                 <div class="ep-actions">
                     <%-- UseSubmitBehavior="false" renders type="button", so pressing Enter
@@ -481,7 +481,7 @@
                             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" />
                         </svg>
                         <asp:Button ID="btnSaveProduct" runat="server" Text="Update Product" CssClass="btn-save"
-                            ValidationGroup="Product" />
+                            ValidationGroup="Product" OnClick="btnSaveProduct_Click" />
                     </span>
                 </div>
             </div>
@@ -495,6 +495,12 @@
                 DisplayMode="SingleParagraph" HeaderText="Please complete the highlighted fields"
                 ShowMessageBox="false" CssClass="summary-error" />
 
+            <%-- No ControlToValidate: btnSaveProduct_Click sets IsValid=false when the record
+                 being edited can no longer be found, instead of redirecting as if it saved. --%>
+            <asp:CustomValidator ID="cvSaveError" runat="server" ValidationGroup="Product"
+                Display="Dynamic" CssClass="summary-error" EnableClientScript="false"
+                Text="This product could not be found - open it again from Product Management." />
+
             <div class="ep-cols">
 
                 <section class="ep-general">
@@ -502,7 +508,7 @@
 
                     <div class="field">
                         <asp:Label ID="lblProductName" runat="server" AssociatedControlID="txtProductName" Text="Product Name <span class='req'>*</span>" />
-                        <asp:TextBox ID="txtProductName" runat="server" Text="Fresh Tomato" autocomplete="off" />
+                        <asp:TextBox ID="txtProductName" MaxLength="60" runat="server" Text="Fresh Tomato" autocomplete="off" />
                         <asp:RequiredFieldValidator ID="rfvProductName" runat="server" ControlToValidate="txtProductName"
                             Text="Product name is required" ValidationGroup="Product" Display="Dynamic"
                             CssClass="field-error" SetFocusOnError="true" />
@@ -514,7 +520,7 @@
 
                     <div class="field">
                         <asp:Label ID="lblDescription" runat="server" AssociatedControlID="txtDescription" Text="Description" />
-                        <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="4"
+                        <asp:TextBox ID="txtDescription" MaxLength="300" runat="server" TextMode="MultiLine" Rows="4"
                             Text="Locally sourced, farm-fresh red tomatoes from Rajkot farms. Ideal for curries, salads, and everyday cooking." />
                         <asp:RequiredFieldValidator ID="rfvDescription" runat="server" ControlToValidate="txtDescription"
                             Text="Description is required" ValidationGroup="Product" Display="Dynamic"
@@ -525,12 +531,34 @@
                             CssClass="field-error" SetFocusOnError="true" />
                     </div>
 
+                    <div class="field">
+                        <asp:Label ID="lblProductImage" runat="server" AssociatedControlID="txtImageUrl" Text="Product Photo / Image" />
+                        <div style="display: flex; align-items: center; gap: 14px; margin-top: 6px;">
+                            <asp:Image ID="imgPreview" runat="server" style="width: 50px; height: 50px; border-radius: 6px; object-fit: cover; border: 1px solid #E1E6EA;" />
+                            <div style="flex: 1;">
+                                <asp:FileUpload ID="fuProductImage" runat="server" style="font-size: 11px; margin-bottom: 4px;"
+                                    accept="image/png,image/jpeg,image/gif,image/webp" />
+                                <asp:TextBox ID="txtImageUrl" runat="server" MaxLength="120" style="font-size: 11px;" placeholder="Image path (e.g. Content/Images/tomato.png)" />
+                                <%-- Empty is allowed: the handler then keeps the stored path. --%>
+                                <asp:RegularExpressionValidator ID="revImageUrl" runat="server" ControlToValidate="txtImageUrl"
+                                    ValidationExpression="^Content/Images/[A-Za-z0-9 ._\-]{1,80}\.(jpg|jpeg|png|gif|webp)$"
+                                    Text="Use a path like Content/Images/tomato.png" ValidationGroup="Product" Display="Dynamic"
+                                    CssClass="field-error" SetFocusOnError="true" />
+                                <%-- No ControlToValidate: btnSaveProduct_Click sets IsValid=false and the
+                                     matching Text when the chosen file is rejected or cannot be saved. --%>
+                                <asp:CustomValidator ID="cvImage" runat="server" ValidationGroup="Product"
+                                    Display="Dynamic" CssClass="field-error" EnableClientScript="false"
+                                    Text="Upload a .jpg, .png, .gif or .webp image" />
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="ep-row3">
                         <div class="field">
                             <asp:Label ID="lblPrice" runat="server" AssociatedControlID="txtPrice" Text="Price per Unit <span class='req'>*</span>" />
                             <div class="price-wrap">
                                 <span class="price-symbol" aria-hidden="true">&#8377;</span>
-                                <asp:TextBox ID="txtPrice" runat="server" Text="40" inputmode="decimal" autocomplete="off" />
+                                <asp:TextBox ID="txtPrice" MaxLength="8" runat="server" Text="40" inputmode="decimal" autocomplete="off" />
                             </div>
                             <asp:RequiredFieldValidator ID="rfvPrice" runat="server" ControlToValidate="txtPrice"
                                 Text="Price is required" ValidationGroup="Product" Display="Dynamic"
@@ -550,11 +578,8 @@
                             <asp:Label ID="lblUnit" runat="server" AssociatedControlID="ddlUnit" Text="Unit <span class='req'>*</span>" />
                             <div class="select-wrap">
                                 <asp:DropDownList ID="ddlUnit" runat="server">
-                                    <asp:ListItem Text="Kilogram (kg)" Value="kg" Selected="True" />
-                                    <asp:ListItem Text="Gram (g)" Value="g" />
-                                    <asp:ListItem Text="Bunch" Value="bunch" />
-                                    <asp:ListItem Text="Piece" Value="piece" />
-                                    <asp:ListItem Text="Litre (l)" Value="l" />
+                                    <asp:ListItem Text="Kilogram (KG)" Value="KG" Selected="True" />
+                                    <asp:ListItem Text="Gram (GM)" Value="GM" />
                                 </asp:DropDownList>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
                             </div>
@@ -562,7 +587,7 @@
 
                         <div class="field">
                             <asp:Label ID="lblStock" runat="server" AssociatedControlID="txtStock" Text="Stock Quantity <span class='req'>*</span>" />
-                            <asp:TextBox ID="txtStock" runat="server" Text="150" inputmode="numeric" autocomplete="off" />
+                            <asp:TextBox ID="txtStock" MaxLength="5" runat="server" Text="150" inputmode="numeric" autocomplete="off" />
                             <asp:RequiredFieldValidator ID="rfvStock" runat="server" ControlToValidate="txtStock"
                                 Text="Stock quantity is required" ValidationGroup="Product" Display="Dynamic"
                                 CssClass="field-error" SetFocusOnError="true" />
@@ -585,6 +610,7 @@
                                 <asp:ListItem Text="Vegetables" Value="Vegetables" Selected="True" />
                                 <asp:ListItem Text="Leafy Greens" Value="Leafy Greens" />
                                 <asp:ListItem Text="Root Vegetables" Value="Root Vegetables" />
+                                <asp:ListItem Text="Marrows" Value="Marrows" />
                                 <asp:ListItem Text="Organic" Value="Organic" />
                                 <asp:ListItem Text="Seasonal" Value="Seasonal" />
                             </asp:DropDownList>
@@ -598,7 +624,7 @@
                             <asp:RadioButton ID="rbStatusActive" runat="server" GroupName="ProdStatus" Checked="true" CssClass="status-opt"
                                 Text="<span class='opt-text'><span class='opt-title'>Active</span><span class='opt-desc'>Product is visible and available for purchase.</span></span>" />
                             <asp:RadioButton ID="rbStatusDraft" runat="server" GroupName="ProdStatus" CssClass="status-opt"
-                                Text="<span class='opt-text'><span class='opt-title'>Draft</span><span class='opt-desc'>Product is hidden from customers.</span></span>" />
+                                Text="<span class='opt-text'><span class='opt-title'>Inactive</span><span class='opt-desc'>Product is hidden from customers.</span></span>" />
                         </div>
                     </div>
                 </section>

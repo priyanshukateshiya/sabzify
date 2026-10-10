@@ -318,7 +318,7 @@
 
             <div class="field">
                 <asp:Label ID="lblCategoryName" runat="server" AssociatedControlID="txtCategoryName" Text="Category Name" />
-                <asp:TextBox ID="txtCategoryName" runat="server" placeholder="e.g., Leafy Greens (Rajkot Local)" autocomplete="off" />
+                <asp:TextBox ID="txtCategoryName" MaxLength="50" runat="server" placeholder="e.g., Leafy Greens (Rajkot Local)" autocomplete="off" />
                 <asp:RequiredFieldValidator ID="rfvCategoryName" runat="server" ControlToValidate="txtCategoryName"
                     Text="Category name is required" ValidationGroup="Category" Display="Dynamic"
                     CssClass="field-error" SetFocusOnError="true" />
@@ -330,7 +330,7 @@
 
             <div class="field">
                 <asp:Label ID="lblDescription" runat="server" AssociatedControlID="txtDescription" Text="Description" />
-                <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="4"
+                <asp:TextBox ID="txtDescription" MaxLength="200" runat="server" TextMode="MultiLine" Rows="4"
                     placeholder="Briefly describe the types of vegetables in this category. e.g., Freshly harvested leafy greens from Gujarat farms." />
                 <asp:RequiredFieldValidator ID="rfvDescription" runat="server" ControlToValidate="txtDescription"
                     Text="Description is required" ValidationGroup="Category" Display="Dynamic"
@@ -375,7 +375,7 @@
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" />
                     </svg>
                     <asp:Button ID="btnSaveCategory" runat="server" Text="Save Category" CssClass="btn-save"
-                        ValidationGroup="Category" />
+                        ValidationGroup="Category" OnClick="btnSaveCategory_Click" />
                 </span>
             </div>
 

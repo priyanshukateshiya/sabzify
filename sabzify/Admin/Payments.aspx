@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Payments" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="Payments.aspx.cs" Inherits="sabzify.Admin.Payments" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Payments" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="Payments.aspx.cs" Inherits="sabzify.Admin.Payments" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="PaymentsTitle" ContentPlaceHolderID="TitleContent" runat="server">Payments</asp:Content>
 
@@ -506,7 +506,7 @@
                         <circle cx="11" cy="11" r="8" />
                         <path d="m21 21-4.3-4.3" />
                     </svg>
-                    <asp:TextBox ID="txtSearch" runat="server" placeholder="Search ID or Name" aria-label="Search by transaction ID or name" />
+                    <asp:TextBox ID="txtSearch" runat="server" MaxLength="40" placeholder="Search ID or Name" aria-label="Search by transaction ID or name" />
                     <asp:RegularExpressionValidator ID="revSearch" runat="server" ControlToValidate="txtSearch"
                         ValidationExpression="^[A-Za-z0-9#\- ]{2,40}$"
                         ErrorMessage="Enter at least 2 letters, numbers or #-" ValidationGroup="PaySearch" Display="Dynamic"
@@ -537,8 +537,8 @@
                             <td>24 Oct, 10:30 AM</td>
                             <td>
                                 <span class="pay-method">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h1M21 14v1" /></svg>
-                                    <span>UPI</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
+                                    <span>Cash on Delivery (COD)</span>
                                 </span>
                             </td>
                             <td><span class="pay-pill is-completed">Completed</span></td>
@@ -555,8 +555,8 @@
                             <td>24 Oct, 11:15 AM</td>
                             <td>
                                 <span class="pay-method">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h1M21 14v1" /></svg>
-                                    <span>UPI</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
+                                    <span>Cash on Delivery (COD)</span>
                                 </span>
                             </td>
                             <td><span class="pay-pill is-pending">Pending</span></td>
@@ -574,7 +574,7 @@
                             <td>
                                 <span class="pay-method">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
-                                    <span>COD</span>
+                                    <span>Cash on Delivery (COD)</span>
                                 </span>
                             </td>
                             <td><span class="pay-pill is-completed">Completed</span></td>
@@ -591,8 +591,8 @@
                             <td>24 Oct, 03:20 PM</td>
                             <td>
                                 <span class="pay-method">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h1M21 14v1" /></svg>
-                                    <span>UPI</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
+                                    <span>Cash on Delivery (COD)</span>
                                 </span>
                             </td>
                             <td><span class="pay-pill is-refunded">Refunded</span></td>
@@ -609,8 +609,8 @@
                             <td>24 Oct, 04:55 PM</td>
                             <td>
                                 <span class="pay-method">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h1M21 14v1" /></svg>
-                                    <span>UPI</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
+                                    <span>Cash on Delivery (COD)</span>
                                 </span>
                             </td>
                             <td><span class="pay-pill is-completed">Completed</span></td>

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="sabzify.Admin.Dashboard" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="sabzify.Admin.Dashboard" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="DashboardTitle" ContentPlaceHolderID="TitleContent" runat="server">Dashboard</asp:Content>
 
@@ -372,10 +372,10 @@
                     </h2>
                 </div>
                 <ul class="stock-list">
-                    <li><span class="stock-name">Fresh Spinach</span><span class="stock-qty">2 bunches left</span></li>
-                    <li><span class="stock-name">Fresh Broccoli</span><span class="stock-qty">1 kg left</span></li>
-                    <li><span class="stock-name">Organic Carrots</span><span class="stock-qty">4 kg left</span></li>
-                    <li><span class="stock-name">Red Bell Peppers</span><span class="stock-qty">3 kg left</span></li>
+                    <li><span class="stock-name">Fresh Spinach</span><span class="stock-qty">500 GM left</span></li>
+                    <li><span class="stock-name">Fresh Broccoli</span><span class="stock-qty">1 KG left</span></li>
+                    <li><span class="stock-name">Organic Carrots</span><span class="stock-qty">4 KG left</span></li>
+                    <li><span class="stock-name">Red Bell Peppers</span><span class="stock-qty">3 KG left</span></li>
                 </ul>
             </section>
 

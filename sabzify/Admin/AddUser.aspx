@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Add New User" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="AddUser.aspx.cs" Inherits="sabzify.Admin.AddUser" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
+<%@ Page Title="Add New User" Language="C#" MasterPageFile="~/Admin/Admin.Master" AutoEventWireup="true" CodeBehind="AddUser.aspx.cs" Inherits="sabzify.Admin.AddUser" UnobtrusiveValidationMode="None" ResponseEncoding="utf-8" %>
 
 <asp:Content ID="AddUserTitle" ContentPlaceHolderID="TitleContent" runat="server">Add New User</asp:Content>
 
@@ -570,7 +570,7 @@
                             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><line x1="19" y1="8" x2="19" y2="14" /><line x1="22" y1="11" x2="16" y2="11" />
                         </svg>
                         <asp:Button ID="btnCreateUser" runat="server" Text="Create User" CssClass="btn-create"
-                            ValidationGroup="AddUser" />
+                            ValidationGroup="AddUser" OnClick="btnCreateUser_Click" />
                     </span>
                 </div>
             </div>
@@ -604,7 +604,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                                 </svg>
-                                <asp:TextBox ID="txtFullName" runat="server" placeholder="Jignesh Mer" autocomplete="off" />
+                                <asp:TextBox ID="txtFullName" runat="server" MaxLength="100" placeholder="Jignesh Mer" autocomplete="off" />
                             </div>
                             <asp:RequiredFieldValidator ID="rfvFullName" runat="server" ControlToValidate="txtFullName"
                                 Text="Full name is required" ValidationGroup="AddUser" Display="Dynamic"
@@ -620,7 +620,7 @@
                             <div class="mobile-join">
                                 <span class="mobile-prefix">+91</span>
                                 <div class="input-wrap">
-                                    <asp:TextBox ID="txtMobile" runat="server" placeholder="98765 43210" autocomplete="off" />
+                                    <asp:TextBox ID="txtMobile" runat="server" MaxLength="11" placeholder="98765 43210" autocomplete="off" />
                                     <svg class="icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                         <rect x="5" y="2" width="14" height="20" rx="2" ry="2" /><line x1="12" y1="18" x2="12.01" y2="18" />
                                     </svg>
@@ -650,6 +650,11 @@
                             ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$"
                             Text="Enter a valid email" ValidationGroup="AddUser" Display="Dynamic"
                             CssClass="field-error" SetFocusOnError="true" />
+                        <%-- Server-only: raised by btnCreateUser_Click when AuthHelper.Register
+                             reports the account key is already taken. --%>
+                        <asp:CustomValidator ID="cvDuplicateEmail" runat="server" ControlToValidate="txtEmail"
+                            Text="An account with this email or mobile number already exists" ValidationGroup="AddUser"
+                            Display="Dynamic" CssClass="field-error" EnableClientScript="false" />
                     </div>
                 </div>
 
@@ -670,7 +675,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
                             </svg>
-                            <asp:TextBox ID="txtStreet" runat="server" placeholder="e.g. 12, Om Nagar, University Road" autocomplete="off" />
+                            <asp:TextBox ID="txtStreet" runat="server" MaxLength="150" placeholder="e.g. 12, Om Nagar, University Road" autocomplete="off" />
                         </div>
                         <asp:RequiredFieldValidator ID="rfvStreet" runat="server" ControlToValidate="txtStreet"
                             Text="Street address is required" ValidationGroup="AddUser" Display="Dynamic"
@@ -688,7 +693,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <rect x="4" y="2" width="16" height="20" rx="2" ry="2" /><path d="M9 22v-4h6v4" /><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01" />
                                 </svg>
-                                <asp:TextBox ID="txtCity" runat="server" Text="Rajkot" autocomplete="off" />
+                                <asp:TextBox ID="txtCity" runat="server" MaxLength="50" Text="Rajkot" autocomplete="off" />
                             </div>
                             <asp:RequiredFieldValidator ID="rfvCity" runat="server" ControlToValidate="txtCity"
                                 Text="City is required" ValidationGroup="AddUser" Display="Dynamic"
@@ -705,7 +710,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" /><line x1="8" y1="2" x2="8" y2="18" /><line x1="16" y1="6" x2="16" y2="22" />
                                 </svg>
-                                <asp:TextBox ID="txtState" runat="server" Text="Gujarat" autocomplete="off" />
+                                <asp:TextBox ID="txtState" runat="server" MaxLength="50" Text="Gujarat" autocomplete="off" />
                             </div>
                             <asp:RequiredFieldValidator ID="rfvState" runat="server" ControlToValidate="txtState"
                                 Text="State is required" ValidationGroup="AddUser" Display="Dynamic"
@@ -723,7 +728,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
                             </svg>
-                            <asp:TextBox ID="txtPincode" runat="server" placeholder="e.g. 360001" autocomplete="off" />
+                            <asp:TextBox ID="txtPincode" runat="server" MaxLength="6" placeholder="e.g. 360001" autocomplete="off" />
                         </div>
                         <asp:RequiredFieldValidator ID="rfvPincode" runat="server" ControlToValidate="txtPincode"
                             Text="Pincode is required" ValidationGroup="AddUser" Display="Dynamic"

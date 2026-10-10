@@ -472,11 +472,11 @@
                     <asp:Label ID="lblStartDate" runat="server" AssociatedControlID="txtStartDate">Start Date</asp:Label>
                     <asp:TextBox ID="txtStartDate" runat="server" placeholder="mm/dd/yyyy" />
                     <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" ControlToValidate="txtStartDate"
-                        ErrorMessage="Start date is required" ValidationGroup="OrderFilter" Display="Dynamic"
+                        Text="Start date is required" ValidationGroup="OrderFilter" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                     <asp:CompareValidator ID="cvStartDateFormat" runat="server" ControlToValidate="txtStartDate"
                         Operator="DataTypeCheck" Type="Date"
-                        ErrorMessage="Use mm/dd/yyyy" ValidationGroup="OrderFilter" Display="Dynamic"
+                        Text="Use mm/dd/yyyy" ValidationGroup="OrderFilter" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                 </div>
 
@@ -484,15 +484,15 @@
                     <asp:Label ID="lblEndDate" runat="server" AssociatedControlID="txtEndDate">End Date</asp:Label>
                     <asp:TextBox ID="txtEndDate" runat="server" placeholder="mm/dd/yyyy" />
                     <asp:RequiredFieldValidator ID="rfvEndDate" runat="server" ControlToValidate="txtEndDate"
-                        ErrorMessage="End date is required" ValidationGroup="OrderFilter" Display="Dynamic"
+                        Text="End date is required" ValidationGroup="OrderFilter" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                     <asp:CompareValidator ID="cvEndDateFormat" runat="server" ControlToValidate="txtEndDate"
                         Operator="DataTypeCheck" Type="Date"
-                        ErrorMessage="Use mm/dd/yyyy" ValidationGroup="OrderFilter" Display="Dynamic"
+                        Text="Use mm/dd/yyyy" ValidationGroup="OrderFilter" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                     <asp:CompareValidator ID="cvEndAfterStart" runat="server" ControlToValidate="txtEndDate"
                         ControlToCompare="txtStartDate" Operator="GreaterThanEqual" Type="Date"
-                        ErrorMessage="End date must be on or after the start date" ValidationGroup="OrderFilter" Display="Dynamic"
+                        Text="End date must be on or after the start date" ValidationGroup="OrderFilter" Display="Dynamic"
                         CssClass="field-error" SetFocusOnError="true" />
                 </div>
 
@@ -504,7 +504,7 @@
             </div>
 
             <asp:ValidationSummary ID="vsOrderFilter" runat="server" ValidationGroup="OrderFilter"
-                DisplayMode="SingleParagraph" HeaderText="" ShowMessageBox="false" CssClass="summary-error" />
+                DisplayMode="SingleParagraph" HeaderText="Please correct the highlighted dates" ShowMessageBox="false" CssClass="summary-error" />
         </div>
 
         <div class="orders-grid">
