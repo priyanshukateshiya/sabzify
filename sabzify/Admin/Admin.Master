@@ -37,23 +37,37 @@
             box-sizing: border-box;
         }
 
+        /* One source of truth for the sidebar width: the sidebar sets its own
+           width from it and .adm-main sets its left margin from it, so the two
+           can never drift apart. The icon-rail media query only overrides this. */
         .admin-shell {
+            --adm-sidebar-w: 210px;
             display: flex;
             min-height: 100vh;
         }
 
         /* Sidebar ------------------------------------------------------------- */
+        /* Taken out of flow and pinned to the viewport, so the page scrolling
+           past it leaves the nav where it is - only .adm-main moves. Its width
+           still comes out to the same 210px of layout as before (border-box),
+           which .adm-main reserves with an equal left margin. */
         .admin-shell .adm-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 20;
             display: flex;
             flex-direction: column;
-            flex: 0 0 210px;
-            width: 210px;
-            min-height: 100vh;
+            width: var(--adm-sidebar-w);
+            height: 100vh;
             background: #EFF7F6;
             border-right: 1px solid #E3ECEA;
         }
 
+        /* Brand and logout keep their full size whatever the viewport height;
+           only the nav list in between gives way (see .adm-nav). */
         .admin-shell .adm-brand {
+            flex-shrink: 0;
             padding: 18px 16px;
         }
 
@@ -93,8 +107,15 @@
             height: 16px;
         }
 
+        /* flex: 1 both fills the gap - which is what holds the logout block
+           against the bottom of the sidebar - and lets the list shrink. The
+           scrollbar is a safety valve for viewports too short to fit all seven
+           links (min-height: 0 is what allows a flex item to shrink that far);
+           at any normal height nothing overflows and none appears. */
         .admin-shell .adm-nav {
             flex: 1;
+            min-height: 0;
+            overflow-y: auto;
             margin: 0;
             padding: 10px 0;
             list-style: none;
@@ -141,6 +162,7 @@
         }
 
         .admin-shell .adm-bottom {
+            flex-shrink: 0;
             padding: 14px 0;
             border-top: 1px solid #EFF1ED;
         }
@@ -150,18 +172,22 @@
         }
 
         /* Main area ------------------------------------------------------------ */
+        /* The left margin reserves the strip the fixed sidebar sits over, so
+           content is never laid out underneath the nav. This is the only part
+           of the page that scrolls. */
         .admin-shell .adm-main {
             flex: 1;
             min-width: 0;
+            margin-left: var(--adm-sidebar-w);
             padding: 24px 28px;
             background: #F7FAFC;
         }
 
-        /* Collapsed icon rail. */
+        /* Collapsed icon rail. Narrowing the sidebar is one declaration now:
+           the rail width and the main area's margin both read the variable. */
         @media screen and (max-width: 900px) {
-            .admin-shell .adm-sidebar {
-                flex-basis: 62px;
-                width: 62px;
+            .admin-shell {
+                --adm-sidebar-w: 62px;
             }
 
             .admin-shell .adm-brand {
